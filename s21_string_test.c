@@ -978,6 +978,75 @@ START_TEST(s21_strtok_test_9) {
   ck_assert_pstr_eq(s21_strtok(str1, "0A\n"), strtok(str1, "0A\n"));
 }
 END_TEST
+
+START_TEST(s21_strtok_test_10) {
+char s[20] = "weg|rbnt|rn";
+char ch[20]  = " |";
+char *res_org = strtok(s,  ch);
+char *res_s21 = s21_strtok(s,  ch);
+
+while(res_org != s21_NULL && res_s21 != s21_NULL) {
+    ck_assert_pstr_eq(res_org,  res_s21);
+    res_org = strtok(s21_NULL,  ch);
+    res_s21 = s21_strtok(s21_NULL,  ch);
+    }
+}
+END_TEST
+
+START_TEST(s21_strtok_test_11) {
+char s[20] = "weg rbn    t|rn";
+char ch[20] = " |";
+char *res_org = strtok(s,  ch);
+char *res_s21 = s21_strtok(s,  ch);
+
+while(res_org != s21_NULL && res_s21 != s21_NULL) {
+    ck_assert_pstr_eq(res_org,  res_s21);
+    res_org = strtok(s21_NULL,  ch);
+    res_s21 = s21_strtok(s21_NULL,  ch);
+    }
+}
+END_TEST
+
+START_TEST(s21_strtok_test_12) {
+char s[20] = "12|";
+char ch[20] = " |";
+char *res_org = strtok(s,  ch);
+char *res_s21 = s21_strtok(s,  ch);
+
+while(res_org != s21_NULL && res_s21 != s21_NULL) {
+    ck_assert_pstr_eq(res_org,  res_s21);
+    res_org = strtok(s21_NULL,  ch);
+    res_s21 = s21_strtok(s21_NULL,  ch);
+    }
+}
+END_TEST
+
+START_TEST(s21_strtok_test_13) {
+char s[20] = "weg|rbnt|rn";
+char ch[20] = "\0";
+char *res_org = strtok(s,  ch);
+char *res_s21 = s21_strtok(s,  ch);
+
+while(res_org != s21_NULL && res_s21 != s21_NULL) {
+    ck_assert_pstr_eq(res_org,  res_s21);
+    res_org = strtok(s21_NULL,  ch);
+    res_s21 = s21_strtok(s21_NULL,  ch);
+    }
+}
+END_TEST
+
+START_TEST(s21_strtok_test_14) {
+char s[20] = "...test/test/test...";
+char ch[20] = "./";
+char *res_org = strtok(s,  ch);
+char *res_s21 = s21_strtok(s,  ch);
+
+while(res_org != s21_NULL && res_s21 != s21_NULL) {
+    ck_assert_pstr_eq(res_org,  res_s21);
+    res_org = strtok(s21_NULL,  ch);
+    res_s21 = s21_strtok(s21_NULL,  ch);
+    }
+}
 // ================================================================================================================
 
 // strcat I
@@ -1576,6 +1645,94 @@ START_TEST(s21_trim_test_5) {
   res = s21_trim(str1, str2);
   ck_assert_str_eq(res, "look at me");
   free(res);
+}
+END_TEST
+
+START_TEST(s21_trim_test_6) {
+char src[5] = "f45f";
+char trim_chars[5] = "f6";
+char *res_s21 = s21_trim(src,  trim_chars);
+char res_org[5] = "45";
+ck_assert_pstr_eq(res_s21,  res_org);
+free(res_s21);
+}
+END_TEST
+
+START_TEST(s21_trim_test_7) {
+char src[5] = "123";
+char trim_chars[5] = "f6";
+char *res_s21 = s21_trim(src,  trim_chars);
+char res_org[5] = "123";
+ck_assert_pstr_eq(res_s21,  res_org);
+free(res_s21);
+}
+END_TEST
+
+START_TEST(s21_trim_test_8) {
+char src[30] = "123u3iui78231";
+char trim_chars[10] = "1hg23";
+char *res_s21 = s21_trim(src,  trim_chars);
+char res_org[20] = "u3iui78";
+ck_assert_pstr_eq(res_s21,  res_org);
+free(res_s21);
+}
+END_TEST
+
+START_TEST(s21_trim_test_9) {
+char src[5] = "\0";
+char trim_chars[5] = "f6";
+char *res_s21 = s21_trim(src,  trim_chars);
+char *res_org = "\0";
+ck_assert_pstr_eq(res_s21,  res_org);
+free(res_s21);
+}
+END_TEST
+
+START_TEST(s21_trim_test_10) {
+char src[6] = "fg\0fv";
+char trim_chars[6] = "f6";
+char *res_s21 = s21_trim(src,  trim_chars);
+char res_org[5] = "g";
+ck_assert_pstr_eq(res_s21,  res_org);
+free(res_s21);
+}
+END_TEST
+
+START_TEST(s21_trim_test_11) {
+char src[] = "qqq";
+char *trim_chars = "q";
+char *res_s21 = s21_trim(src, trim_chars);
+char *res_org = "\0";
+ck_assert_pstr_eq(res_s21,  res_org);
+free(res_s21);
+}
+
+START_TEST(s21_trim_test_12) {
+char src[] = "\0";
+char *trim_chars = "\0";
+char *res_s21 = s21_trim(src, trim_chars);
+char *res_org = "\0";
+ck_assert_pstr_eq(res_s21,  res_org);
+free(res_s21);
+}
+
+START_TEST(s21_trim_test_13) {
+char src[] = "qqq    v   ";
+char *trim_chars = s21_NULL;
+char *res_s21 = s21_trim(src,  trim_chars);
+char res_org[] = "qqq    v";
+ck_assert_pstr_eq(res_s21,  res_org);
+free(res_s21);
+}
+
+END_TEST
+START_TEST(s21_trim_test_14) {
+char src[10] = "/=f45f";
+char trim_chars[5] = "f";
+char *res_s21 = s21_trim(src,  trim_chars);
+char res_org[10] = "/=f45";
+ck_assert_pstr_eq(res_s21,  res_org);
+free(res_s21);
 }
 END_TEST
 
@@ -2204,6 +2361,11 @@ Suite *s21_strtok_ste(void) {
   tcase_add_test(tc_core, s21_strtok_test_7);
   tcase_add_test(tc_core, s21_strtok_test_8);
   tcase_add_test(tc_core, s21_strtok_test_9);
+  tcase_add_test(tc_core, s21_strtok_test_10);
+  tcase_add_test(tc_core, s21_strtok_test_11);
+  tcase_add_test(tc_core, s21_strtok_test_12);
+  tcase_add_test(tc_core, s21_strtok_test_13);
+  tcase_add_test(tc_core, s21_strtok_test_14);
   suite_add_tcase(s, tc_core);
 
   return s;
@@ -2374,6 +2536,15 @@ Suite *s21_trim_ste(void) {
   tcase_add_test(tc_core, s21_trim_test_3);
   tcase_add_test(tc_core, s21_trim_test_4);
   tcase_add_test(tc_core, s21_trim_test_5);
+  tcase_add_test(tc_core, s21_trim_test_6);
+  tcase_add_test(tc_core, s21_trim_test_7);
+  tcase_add_test(tc_core, s21_trim_test_8);
+  tcase_add_test(tc_core, s21_trim_test_9);
+  tcase_add_test(tc_core, s21_trim_test_10);
+  tcase_add_test(tc_core, s21_trim_test_11);
+  tcase_add_test(tc_core, s21_trim_test_12);
+  tcase_add_test(tc_core, s21_trim_test_13);
+  tcase_add_test(tc_core, s21_trim_test_14);
   suite_add_tcase(s, tc_core);
 
   return s;
