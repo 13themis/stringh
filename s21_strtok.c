@@ -1,53 +1,49 @@
 #include "s21_string.h"
 
-char *s21_strtok(char *str, const char *delim) {
-  static char *full_stack;
-  static char *del;
-  static s21_size_t ind;
-  static nt_null;
-  static chr;
-  if (str) {
-    chr = 1;
-    ind = 0;
-    nt_null = 0;
-    full_stack = str + s21_strlen(str);
-    del = str +s21_strspn(str, delim);
-  }
-  char *res = s21_NULL;
+int delim_flag(char c, const char *delim) {
+  int res = 0;
+  int end =0;
 
-  if (!(del >= full_stack || '\0')) {
-    int i = 0;
-    int nol_d = 1;
-    for (i; del[i]; i++) {
-      s21_size_t tap = s21_strspn(del + i, delim);
-      if (tap) {
-        nol_d = 0;
-        for (s21_size_t j = i; j < i + tap; j++) {
-          del[j] = '\0';
-          ind = tap + i;
-          break;
-        }
-      }
-      if (chr == 1 && nol_d) nt_null = 1;
-      res = del;
-      del += ind;
+  while (*delim != '\0' && end == 0) {
+    if (c == *delim) {
+      res = 1;
+      end = 1;
+    } else {
+      delim++;
     }
   }
-  
-  ++chr;
   return res;
 }
 
+char *s21_strtok(char *str, const char *delim) {
+  static char *begin_str = s21_NULL;
+  char *end_str = (char *) s21_NULL;
 
-
-// while (str[i] != '\0') {
-  //   for (s21_size_t j = 0; j < s21_strlen(delim); j++) {
-  //     if (str[i] == delim[j]) {
-  //       str[i] = '\0';
-  //     }
-  //   }
-  //   i++;
-  // }
-  // if (*str != '\0') {
-  //   res = str;
-  // }
+  if (str != s21_NULL || begin_str != s21_NULL) {
+    if (str == s21_NULL) {
+      str = begin_str;
+    }
+    if (*str != '\0') {
+      while (delim_flag(*str, delim) == 1) {
+        str++;
+      }
+      if (*str != '\0') {
+        end_str =str;
+        int end = 0;
+        while (end != 1) {
+          if (*str == '\0') {
+            begin_str = str;
+            end = 1;
+          } else if (delim_flag(*str, delim) == 1) {
+            *str = '\0';
+            begin_str = str + 1;
+            end = 1;
+          } else {
+            str++;
+          }
+        }
+      }
+    }
+  }
+  return end_str;
+}
