@@ -10,6 +10,7 @@
 
 #define s21_size_t unsigned long long
 #define s21_NULL (void *)0
+#define BUFF_SIZE 512
 
 #if defined(__APPLE__)
 #define MAX_NUMBER 107
@@ -32,7 +33,7 @@ char *s21_strcpy(char *dest, const char *src);
 char *s21_strerror(int errnum);
 char *s21_strncat(char *dest, const char *src, s21_size_t n);
 char *s21_strncpy(char *dest, const char *src, s21_size_t n);
-void *s21_memset(void *dest, int c, s21_size_t n);
+void *s21_memset(void *str, int c, s21_size_t n);
 int s21_strncmp(const char *str1, const char *str2, s21_size_t n);
 int s21_memcmp(const void *str1, const void *str2, s21_size_t n);
 int s21_strcmp(const char *str1, const char *str2);
@@ -78,7 +79,7 @@ char sign_func_subst(long double *number, int *plus, int *space);
 int whole_part(long double number, int *buff);
 int fraction_part(int shortage, long double number, int *buff, int whole);
 int round_number(int *buff, int len, int *buff1, int *whole);
-int str_form(parsing flags, int *buff1, int whole, char c, char *buff_str, int *len_str);
+int str_form(parsing flags, const int *buff1, int whole, char c, char *buff_str, int *len_str);
 int consider_g(char *buff_str, int *len_str, int *len, int from_g_gird);
 int format_d(parsing flags, int len, char *buff_str, char sign, int *buff_len);
 int format_f(parsing flags, int len1, int len, char c, char *buff_str, int *buff_len);
@@ -96,6 +97,5 @@ int def_number(char c);
 char *wstrcat(char *dest, const wchar_t *src);
 char convert_to_bx(int value);
 char convert_to_x(int value);
-
 
 #endif  // SRC_S21_STRING_H_

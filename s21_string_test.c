@@ -540,6 +540,73 @@ START_TEST(s21_strncpy_test_8) {
   ck_assert_pstr_eq(s21_strncpy(str1, "HELLO", 10), strncpy(str2, "HELLO", 10));
 }
 END_TEST
+
+START_TEST(s21_strncpy_test_9) {
+  char str1[9] = "ab\0c";
+  char str2[] = "def";
+  char str3[9] = "ab\0c";
+  int n = 1;
+  ck_assert_str_eq(strncpy(str1, str2, n), s21_strncpy(str3, str2, n));
+}
+END_TEST
+
+START_TEST(s21_strncpy_test_10) {
+  char str1[9] = "abc";
+  char str2[] = "de\0f";
+  char str3[9] = "abc";
+  int n = 1;
+  ck_assert_str_eq(strncpy(str1, str2, n), s21_strncpy(str3, str2, n));
+}
+END_TEST
+
+START_TEST(s21_strncpy_test_11) {
+  char str1[9] = "abc";
+  char str2[] = "de\nf";
+  char str3[9] = "abc";
+  int n = 1;
+  ck_assert_str_eq(strncpy(str1, str2, n), s21_strncpy(str3, str2, n));
+}
+END_TEST
+
+START_TEST(s21_strncpy_test_12) {
+#line 2241
+  char str1[9] = "abc";
+  char str2[] = "def";
+  char str3[9] = "abc";
+  int n = 1;
+  ck_assert_str_eq(strncpy(str1, str2, n), s21_strncpy(str3, str2, n));
+}
+END_TEST
+
+START_TEST(s21_strncpy_test_13) {
+#line 2248
+  char str1[9] = "abc";
+  char str2[] = "def";
+  char str3[9] = "abc";
+  int n = 1;
+  ck_assert_str_eq(strncpy(str1, str2, n), s21_strncpy(str3, str2, n));
+}
+END_TEST
+
+START_TEST(s21_strncpy_test_14) {
+  char str1[9] = "ab\0c";
+  char str2[] = "def";
+  char str3[9] = "ab\0c";
+  int n = 0;
+  ck_assert_str_eq(strncpy(str1, str2, n), s21_strncpy(str3, str2, n));
+}
+END_TEST
+
+START_TEST(s21_strncpy_test_15) {
+  char str1[9] = "abc";
+  char str2[] = "de\0f";
+  char str3[9] = "abc";
+  int n = 0;
+  ck_assert_str_eq(strncpy(str1, str2, n), s21_strncpy(str3, str2, n));
+}
+END_TEST
+
+
 // ================================================================================================================
 
 // strncmp I
@@ -609,8 +676,8 @@ END_TEST
 // strncmp IX
 START_TEST(s21_strncmp_test_9) {
   char str1[15] = " a\0";
-  char str2[15] = "a\0";
-  ck_assert_int_eq(s21_strncmp(str1, str2, 3), strncmp(str1, str2, 4));
+  char str2[15] = " a\0";
+  ck_assert_int_eq(s21_strncmp(str1, str2, 4), strncmp(str1, str2, 4));
 }
 END_TEST
 
@@ -619,6 +686,160 @@ START_TEST(s21_strncmp_test_10) {
   char str1[15] = "Hello\nWorld\n:)\0";
   char str2[15] = "Hello\nWorld\n:)\0";
   ck_assert_int_eq(s21_strncmp(str1, str2, 8), strncmp(str1, str2, 8));
+}
+END_TEST
+
+START_TEST(s21_strncmp_test_11) {
+  char str1[] = "abc";
+  char str2[] = " abc";
+  int n = 0;
+  int s21 = s21_strncmp(str1, str2, n);
+  int s00 = strncmp(str1, str2, n);
+  if (s21 > 1) {
+    s21 = 1;
+  }
+  if (s21 < -1) {
+    s21 = -1;
+  }
+  if (s00 > 1) {
+    s00 = 1;
+  }
+  if (s00 < -1) {
+    s00 = -1;
+  }
+  ck_assert_int_eq(s21, s00);
+}
+END_TEST
+
+START_TEST(s21_strncmp_test_12) {
+  char str1[] = "123";
+  char str2[] = "321";
+  int n = 0;
+  int s21 = s21_strncmp(str1, str2, n);
+  int s00 = strncmp(str1, str2, n);
+  if (s21 > 1) {
+    s21 = 1;
+  }
+  if (s21 < -1) {
+    s21 = -1;
+  }
+  if (s00 > 1) {
+    s00 = 1;
+  }
+  if (s00 < -1) {
+    s00 = -1;
+  }
+  ck_assert_int_eq(s21, s00);
+}
+END_TEST
+
+START_TEST(s21_strncmp_test_13) {
+  char str1[] = "321";
+  char str2[] = "123";
+  int n = 0;
+  int s21 = s21_strncmp(str1, str2, n);
+  int s00 = strncmp(str1, str2, n);
+  if (s21 > 1) {
+    s21 = 1;
+  }
+  if (s21 < -1) {
+    s21 = -1;
+  }
+  if (s00 > 1) {
+    s00 = 1;
+  }
+  if (s00 < -1) {
+    s00 = -1;
+  }
+  ck_assert_int_eq(s21, s00);
+}
+END_TEST
+
+START_TEST(s21_strncmp_test_14) {
+  char str1[] = "1234";
+  char str2[] = "123";
+  int n = 0;
+  int s21 = s21_strncmp(str1, str2, n);
+  int s00 = strncmp(str1, str2, n);
+  if (s21 > 1) {
+    s21 = 1;
+  }
+  if (s21 < -1) {
+    s21 = -1;
+  }
+  if (s00 > 1) {
+    s00 = 1;
+  }
+  if (s00 < -1) {
+    s00 = -1;
+  }
+  ck_assert_int_eq(s21, s00);
+}
+END_TEST
+
+START_TEST(s21_strncmp_test_15) {
+  char str1[] = "132";
+  char str2[] = "1234";
+  int n = 0;
+  int s21 = s21_strncmp(str1, str2, n);
+  int s00 = strncmp(str1, str2, n);
+  if (s21 > 1) {
+    s21 = 1;
+  }
+  if (s21 < -1) {
+    s21 = -1;
+  }
+  if (s00 > 1) {
+    s00 = 1;
+  }
+  if (s00 < -1) {
+    s00 = -1;
+  }
+  ck_assert_int_eq(s21, s00);
+}
+END_TEST
+
+START_TEST(s21_strncmp_test_17) {
+  char str1[] = "abc";
+  char str2[] = "abcd";
+  int n = 0;
+  int s21 = s21_strncmp(str1, str2, n);
+  int s00 = strncmp(str1, str2, n);
+  if (s21 > 1) {
+    s21 = 1;
+  }
+  if (s21 < -1) {
+    s21 = -1;
+  }
+  if (s00 > 1) {
+    s00 = 1;
+  }
+  if (s00 < -1) {
+    s00 = -1;
+  }
+  ck_assert_int_eq(s21, s00);
+}
+END_TEST
+
+START_TEST(s21_strncmp_test_18) {
+  char str1[] = "ab12";
+  char str2[] = "12ab";
+  int n = 0;
+  int s21 = s21_strncmp(str1, str2, n);
+  int s00 = strncmp(str1, str2, n);
+  if (s21 > 1) {
+    s21 = 1;
+  }
+  if (s21 < -1) {
+    s21 = -1;
+  }
+  if (s00 > 1) {
+    s00 = 1;
+  }
+  if (s00 < -1) {
+    s00 = -1;
+  }
+  ck_assert_int_eq(s21, s00);
 }
 END_TEST
 // ================================================================================================================
@@ -2077,7 +2298,7 @@ START_TEST(s21_sprintf_test_15) {
 }
 END_TEST
 
-START_TEST(simple_int) {
+START_TEST(s21_sprintf_test_int_16) {
     char str1[512];
     char str2[512];
 
@@ -2090,7 +2311,7 @@ START_TEST(simple_int) {
 }
 END_TEST
 
-START_TEST(precise_int) {
+START_TEST(s21_sprintf_test_int_17) {
     char str1[512];
     char str2[512];
 
@@ -2103,7 +2324,7 @@ START_TEST(precise_int) {
 }
 END_TEST
 
-START_TEST(width_int) {
+START_TEST(s21_sprintf_test_int_18) {
     char str1[512];
     char str2[512];
 
@@ -2116,7 +2337,7 @@ START_TEST(width_int) {
 }
 END_TEST
 
-START_TEST(minus_width_int) {
+START_TEST(s21_sprintf_test_int_19) {
     char str1[512];
     char str2[512];
 
@@ -2129,7 +2350,7 @@ START_TEST(minus_width_int) {
 }
 END_TEST
 
-START_TEST(plus_width_int) {
+START_TEST(s21_sprintf_test_int_20) {
     char str1[512];
     char str2[512];
 
@@ -2142,7 +2363,7 @@ START_TEST(plus_width_int) {
 }
 END_TEST
 
-START_TEST(padding_int) {
+START_TEST(s21_sprintf_test_int_21) {
     char str1[512];
     char str2[512];
 
@@ -2155,7 +2376,7 @@ START_TEST(padding_int) {
 }
 END_TEST
 
-START_TEST(star_width_int) {
+START_TEST(s21_sprintf_test_int_22) {
     char str1[512];
     char str2[512];
 
@@ -2168,7 +2389,7 @@ START_TEST(star_width_int) {
 }
 END_TEST
 
-START_TEST(star_precision_int) {
+START_TEST(s21_sprintf_test_int_23) {
     char str1[512];
     char str2[512];
 
@@ -2181,7 +2402,7 @@ START_TEST(star_precision_int) {
 }
 END_TEST
 
-START_TEST(many_flags_many_ints) {
+START_TEST(s21_sprintf_test_int_24) {
     char str1[512];
     char str2[512];
 
@@ -2195,7 +2416,7 @@ START_TEST(many_flags_many_ints) {
 }
 END_TEST
 
-START_TEST(flags_long_int) {
+START_TEST(s21_sprintf_test_int_25) {
     char str1[512];
     char str2[512];
 
@@ -2208,7 +2429,7 @@ START_TEST(flags_long_int) {
 }
 END_TEST
 
-START_TEST(flags_short_int) {
+START_TEST(s21_sprintf_test_int_26) {
     char str1[512];
     char str2[512];
 
@@ -2221,7 +2442,7 @@ START_TEST(flags_short_int) {
 }
 END_TEST
 
-START_TEST(flags_another_long_int) {
+START_TEST(s21_sprintf_test_int_27) {
     char str1[512];
     char str2[512];
 
@@ -2234,7 +2455,7 @@ START_TEST(flags_another_long_int) {
 }
 END_TEST
 
-START_TEST(zero_precision_zero_int) {
+START_TEST(s21_sprintf_test_int_28) {
     char str1[512];
     char str2[512];
 
@@ -2247,7 +2468,7 @@ START_TEST(zero_precision_zero_int) {
 }
 END_TEST
 
-START_TEST(space_flag_int) {
+START_TEST(s21_sprintf_test_int_29) {
     char str1[512];
     char str2[512];
 
@@ -2260,7 +2481,7 @@ START_TEST(space_flag_int) {
 }
 END_TEST
 
-START_TEST(unsigned_val) {
+START_TEST(s21_sprintf_test_val_30) {
     char str1[512];
     char str2[512];
 
@@ -2273,7 +2494,7 @@ START_TEST(unsigned_val) {
 }
 END_TEST
 
-START_TEST(unsigned_val_width) {
+START_TEST(s21_sprintf_test_val_31) {
     char str1[512];
     char str2[512];
 
@@ -2286,7 +2507,7 @@ START_TEST(unsigned_val_width) {
 }
 END_TEST
 
-START_TEST(unsigned_val_flags) {
+START_TEST(s21_sprintf_test_val_32) {
     char str1[512];
     char str2[512];
 
@@ -2299,7 +2520,7 @@ START_TEST(unsigned_val_flags) {
 }
 END_TEST
 
-START_TEST(unsigned_val_precision) {
+START_TEST(s21_sprintf_test_val_33) {
     char str1[512];
     char str2[512];
 
@@ -2311,7 +2532,7 @@ START_TEST(unsigned_val_precision) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(unsigned_val_many_flags) {
+START_TEST(s21_sprintf_test_val_34) {
     char str1[512];
     char str2[512];
 
@@ -2323,7 +2544,7 @@ START_TEST(unsigned_val_many_flags) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(unsigned_val_short) {
+START_TEST(s21_sprintf_test_val_35) {
     char str1[512];
     char str2[512];
 
@@ -2336,7 +2557,7 @@ START_TEST(unsigned_val_short) {
 }
 END_TEST
 
-START_TEST(unsigned_val_long) {
+START_TEST(s21_sprintf_test_val_36) {
     char str1[512];
     char str2[512];
 
@@ -2349,7 +2570,7 @@ START_TEST(unsigned_val_long) {
 }
 END_TEST
 
-START_TEST(unsigned_val_many) {
+START_TEST(s21_sprintf_test_val_37) {
     char str1[512];
     char str2[512];
 
@@ -2363,7 +2584,7 @@ START_TEST(unsigned_val_many) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(octal_width) {
+START_TEST(s21_sprintf_test_val_38) {
     char str1[512];
     char str2[512];
 
@@ -2376,7 +2597,7 @@ START_TEST(octal_width) {
 }
 END_TEST
 
-START_TEST(octal_flags) {
+START_TEST(s21_sprintf_test_octal_39) {
     char str1[512];
     char str2[512];
 
@@ -2389,7 +2610,7 @@ START_TEST(octal_flags) {
 }
 END_TEST
 
-START_TEST(octal_precision) {
+START_TEST(s21_sprintf_test_octal_40) {
     char str1[512];
     char str2[512];
 
@@ -2401,7 +2622,7 @@ START_TEST(octal_precision) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(octal_many_flags) {
+START_TEST(s21_sprintf_test_octal_41) {
     char str1[512];
     char str2[512];
 
@@ -2414,7 +2635,7 @@ START_TEST(octal_many_flags) {
 }
 END_TEST
 
-START_TEST(octal_zero) {
+START_TEST(s21_sprintf_test_octal_42) {
     char str1[512];
     char str2[512];
 
@@ -2425,7 +2646,7 @@ START_TEST(octal_zero) {
 }
 END_TEST
 
-START_TEST(octal_hash) {
+START_TEST(s21_sprintf_test_octal_43) {
     char str1[512];
     char str2[512];
 
@@ -2437,7 +2658,7 @@ START_TEST(octal_hash) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(octal_short) {
+START_TEST(s21_sprintf_test_octal_44) {
     char str1[512];
     char str2[512];
 
@@ -2450,7 +2671,7 @@ START_TEST(octal_short) {
 }
 END_TEST
 
-START_TEST(octal_long) {
+START_TEST(s21_sprintf_test_octal_45) {
     char str1[512];
     char str2[512];
 
@@ -2463,7 +2684,7 @@ START_TEST(octal_long) {
 }
 END_TEST
 
-START_TEST(octal_many) {
+START_TEST(s21_sprintf_test_octal_46) {
     char str1[512];
     char str2[512];
 
@@ -2478,7 +2699,7 @@ START_TEST(octal_many) {
 }
 END_TEST
 
-START_TEST(octal) {
+START_TEST(s21_sprintf_test_octal_47) {
     char str1[512];
     char str2[512];
 
@@ -2491,7 +2712,7 @@ START_TEST(octal) {
 }
 END_TEST
 
-START_TEST(unsigned_zero) {
+START_TEST(s21_sprintf_test_zero_48) {
     char str1[512];
     char str2[512];
 
@@ -2503,7 +2724,7 @@ START_TEST(unsigned_zero) {
 }
 END_TEST
 
-START_TEST(hex_width) {
+START_TEST(s21_sprintf_test_hex_49) {
     char str1[512];
     char str2[512];
 
@@ -2516,7 +2737,7 @@ START_TEST(hex_width) {
 }
 END_TEST
 
-START_TEST(hex_flags) {
+START_TEST(s21_sprintf_test_hex_50) {
     char str1[512];
     char str2[512];
 
@@ -2528,7 +2749,7 @@ START_TEST(hex_flags) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(hex_precision) {
+START_TEST(s21_sprintf_test_hex_51) {
     char str1[512];
     char str2[512];
 
@@ -2540,7 +2761,7 @@ START_TEST(hex_precision) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(hex_many) {
+START_TEST(s21_sprintf_test_hex_52) {
     char str1[512];
     char str2[512];
 
@@ -2552,7 +2773,7 @@ START_TEST(hex_many) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(hex_many_flags) {
+START_TEST(s21_sprintf_test_hex_53) {
     char str1[512];
     char str2[512];
 
@@ -2564,7 +2785,7 @@ START_TEST(hex_many_flags) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(hex_zero) {
+START_TEST(s21_sprintf_test_hex_54) {
     char str1[512];
     char str2[512];
 
@@ -2576,7 +2797,7 @@ START_TEST(hex_zero) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(hex_huge) {
+START_TEST(s21_sprintf_test_hex_55) {
     char str1[512];
     char str2[512];
 
@@ -2588,7 +2809,7 @@ START_TEST(hex_huge) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(hex_short) {
+START_TEST(s21_sprintf_test_hex_56) {
     char str1[512];
     char str2[512];
 
@@ -2600,7 +2821,7 @@ START_TEST(hex_short) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(hex_long) {
+START_TEST(s21_sprintf_test_hex_57) {
     char str1[512];
     char str2[512];
 
@@ -2612,7 +2833,7 @@ START_TEST(hex_long) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(hex_one_longer_width) {
+START_TEST(s21_sprintf_test_hex_58) {
     char str1[512];
     char str2[512];
 
@@ -2625,7 +2846,7 @@ START_TEST(hex_one_longer_width) {
 }
 END_TEST
 
-START_TEST(hex_two_longer_width) {
+START_TEST(s21_sprintf_test_hex_59) {
     char str1[512];
     char str2[512];
 
@@ -2638,7 +2859,7 @@ START_TEST(hex_two_longer_width) {
 }
 END_TEST
 
-START_TEST(one_char) {
+START_TEST(s21_sprintf_test_60) {
     char str1[512];
     char str2[512];
 
@@ -2650,7 +2871,7 @@ START_TEST(one_char) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(one_precision) {
+START_TEST(s21_sprintf_test_61) {
     char str1[512];
     char str2[512];
 
@@ -2663,7 +2884,7 @@ START_TEST(one_precision) {
 }
 END_TEST
 
-START_TEST(one_flags) {
+START_TEST(s21_sprintf_test_62) {
     char str1[512];
     char str2[512];
 
@@ -2676,7 +2897,7 @@ START_TEST(one_flags) {
 }
 END_TEST
 
-START_TEST(one_width) {
+START_TEST(s21_sprintf_test_63) {
     char str1[512];
     char str2[512];
 
@@ -2689,7 +2910,7 @@ START_TEST(one_width) {
 }
 END_TEST
 
-START_TEST(one_many) {
+START_TEST(s21_sprintf_test_64) {
     char str1[512];
     char str2[512];
 
@@ -2702,7 +2923,7 @@ START_TEST(one_many) {
 }
 END_TEST
 
-START_TEST(one_many_flags) {
+START_TEST(s21_sprintf_test_65) {
     char str1[512];
     char str2[512];
 
@@ -2715,7 +2936,7 @@ START_TEST(one_many_flags) {
 }
 END_TEST
 
-START_TEST(string) {
+START_TEST(s21_sprintf_test_string_66) {
     char str1[512];
     char str2[512];
 
@@ -2727,7 +2948,7 @@ START_TEST(string) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(string_precision) {
+START_TEST(s21_sprintf_test_string_67) {
     char str1[512];
     char str2[512];
 
@@ -2739,7 +2960,7 @@ START_TEST(string_precision) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(string_width) {
+START_TEST(s21_sprintf_test_string_68) {
     char str1[512];
     char str2[512];
 
@@ -2751,7 +2972,7 @@ START_TEST(string_width) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(string_flags) {
+START_TEST(s21_sprintf_test_string_69) {
     char str1[512];
     char str2[512];
 
@@ -2764,7 +2985,7 @@ START_TEST(string_flags) {
 }
 END_TEST
 
-START_TEST(string_long) {
+START_TEST(s21_sprintf_test_string_70) {
     char str1[512];
     char str2[512];
 
@@ -2778,7 +2999,7 @@ START_TEST(string_long) {
 }
 END_TEST
 
-START_TEST(string_many) {
+START_TEST(s21_sprintf_test_string_71) {
     char str1[512];
     char str2[512];
 
@@ -2794,7 +3015,7 @@ START_TEST(string_many) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(ptr) {
+START_TEST(s21_sprintf_test_ptr_72) {
     char str1[512];
     char str2[512];
 
@@ -2805,7 +3026,7 @@ START_TEST(ptr) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(ptr_width) {
+START_TEST(s21_sprintf_test_ptr_73) {
     char str1[512];
     char str2[512];
 
@@ -2816,7 +3037,7 @@ START_TEST(ptr_width) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(ptr_precision) {
+START_TEST(s21_sprintf_test_ptr_74) {
     char str1[512];
     char str2[512];
 
@@ -2827,7 +3048,7 @@ START_TEST(ptr_precision) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(null_ptr) {
+START_TEST(s21_sprintf_test_ptr_75) {
     char str1[512];
     char str2[512];
 
@@ -2840,7 +3061,7 @@ START_TEST(null_ptr) {
 }
 END_TEST
 
-START_TEST(string_width_huge) {
+START_TEST(s21_sprintf_test_76) {
     char str1[512];
     char str2[512];
     char *val = "kjafdiuhfjahfjdahf";
@@ -2851,7 +3072,7 @@ START_TEST(string_width_huge) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(n_specifier) {
+START_TEST(s21_sprintf_test_77) {
     char str1[512];
     char str2[512];
     int ret = 0;
@@ -2862,7 +3083,7 @@ START_TEST(n_specifier) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(float_precision) {
+START_TEST(s21_sprintf_test_78) {
     char str1[512];
     char str2[512];
     char *format = "%Lf";
@@ -2873,7 +3094,7 @@ START_TEST(float_precision) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(float_width) {
+START_TEST(s21_sprintf_test_79) {
     char str1[512];
     char str2[512];
     char *format = "%10Lf";
@@ -2884,7 +3105,7 @@ START_TEST(float_width) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(float_precision_zero) {
+START_TEST(s21_sprintf_test_80) {
     char str1[512];
     char str2[512];
     char *format = "%.0Lf";
@@ -2896,7 +3117,7 @@ START_TEST(float_precision_zero) {
 }
 END_TEST
 
-START_TEST(float_precision_empty) {
+START_TEST(s21_sprintf_test_81) {
     char str1[512];
     char str2[512];
     char *format = "%.Lf";
@@ -2907,7 +3128,7 @@ START_TEST(float_precision_empty) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(float_precision_huge) {
+START_TEST(s21_sprintf_test_82) {
     char str1[512];
     char str2[512];
     char *format = "%.15Lf";
@@ -2919,7 +3140,7 @@ START_TEST(float_precision_huge) {
 }
 END_TEST
 
-START_TEST(float_precision_huge_negative) {
+START_TEST(s21_sprintf_test_83) {
     char str1[512];
     char str2[512];
     char *format = "%.15Lf";
@@ -2931,7 +3152,7 @@ START_TEST(float_precision_huge_negative) {
 }
 END_TEST
 
-START_TEST(float_huge) {
+START_TEST(s21_sprintf_test_84) {
     char str1[512];
     char str2[512];
     char *format = "%Lf";
@@ -2942,7 +3163,7 @@ START_TEST(float_huge) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(float_flags) {
+START_TEST(s21_sprintf_test_85) {
     char str1[512];
     char str2[512];
     char *format = "% f";
@@ -2953,7 +3174,7 @@ START_TEST(float_flags) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(float_many) {
+START_TEST(s21_sprintf_test_86) {
     char str1[512];
     char str2[512];
     char *format = "% .0f %.lf %Lf %f %lf %Lf";
@@ -2970,7 +3191,7 @@ START_TEST(float_many) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(e_precision) {
+START_TEST(s21_sprintf_test_87) {
     char str1[512];
     char str2[512];
     char *format = "%.17Le";
@@ -2981,7 +3202,7 @@ START_TEST(e_precision) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(e_precision_zero) {
+START_TEST(s21_sprintf_test_88) {
     char str1[512];
     char str2[512];
     char *format = "%.0Le";
@@ -2993,7 +3214,7 @@ START_TEST(e_precision_zero) {
 }
 END_TEST
 
-START_TEST(e_precision_empty) {
+START_TEST(s21_sprintf_test_89) {
     char str1[512];
     char str2[512];
     char *format = "%.Le";
@@ -3004,7 +3225,7 @@ START_TEST(e_precision_empty) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(e_precision_huge) {
+START_TEST(s21_sprintf_test_90) {
     char str1[512];
     char str2[512];
     char *format = "%.15Le";
@@ -3016,7 +3237,7 @@ START_TEST(e_precision_huge) {
 }
 END_TEST
 
-START_TEST(e_precision_huge_negative) {
+START_TEST(s21_sprintf_test_91) {
     char str1[512];
     char str2[512];
     char *format = "%.15Le";
@@ -3028,7 +3249,7 @@ START_TEST(e_precision_huge_negative) {
 }
 END_TEST
 
-START_TEST(e_huge) {
+START_TEST(s21_sprintf_test_92) {
     char str1[512];
     char str2[512];
     char *format = "%Le";
@@ -3039,7 +3260,7 @@ START_TEST(e_huge) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(e_flags) {
+START_TEST(s21_sprintf_test_93) {
     char str1[512];
     char str2[512];
     char *format = "%015E";
@@ -3050,7 +3271,7 @@ START_TEST(e_flags) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(e_width) {
+START_TEST(s21_sprintf_test_94) {
     char str1[512];
     char str2[512];
     char *format = "%15e";
@@ -3061,7 +3282,7 @@ START_TEST(e_width) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(e_many) {
+START_TEST(s21_sprintf_test_95) {
     char str1[512];
     char str2[512];
     char *format = "% .0e %.le %Le %e %le %Le";
@@ -3078,7 +3299,7 @@ START_TEST(e_many) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(E_int) {
+START_TEST(s21_sprintf_test_96) {
     char str1[512];
     char str2[512];
     char *format = "%.17LE";
@@ -3089,7 +3310,7 @@ START_TEST(E_int) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(all_empty) {
+START_TEST(s21_sprintf_test_97) {
     char str1[512];
     char str2[512];
     ck_assert_int_eq(s21_sprintf(str1, "abc"), sprintf(str2, "abc"));
@@ -3098,7 +3319,7 @@ START_TEST(all_empty) {
 }
 END_TEST
 
-START_TEST(empty_format_and_parameters) {
+START_TEST(s21_sprintf_test_98) {
     char str1[512];
     char str2[512];
 
@@ -3108,7 +3329,7 @@ START_TEST(empty_format_and_parameters) {
 }
 END_TEST
 
-START_TEST(test_one_char) {
+START_TEST(s21_sprintf_test_99) {
     char str1[512];
     char str2[512];
 
@@ -3118,7 +3339,7 @@ START_TEST(test_one_char) {
 }
 END_TEST
 
-START_TEST(test_many_char) {
+START_TEST(s21_sprintf_test_100) {
     char str1[512];
     char str2[512];
 
@@ -3129,7 +3350,7 @@ START_TEST(test_many_char) {
 }
 END_TEST
 
-START_TEST(test_one_string) {
+START_TEST(s21_sprintf_test_101) {
     char str1[512];
     char str2[512];
 
@@ -3140,7 +3361,7 @@ START_TEST(test_one_string) {
 }
 END_TEST
 
-START_TEST(test_many_string) {
+START_TEST(s21_sprintf_test_102) {
     char str1[512];
     char str2[512];
 
@@ -3152,7 +3373,7 @@ START_TEST(test_many_string) {
 }
 END_TEST
 
-START_TEST(test_one_dec) {
+START_TEST(s21_sprintf_test_103) {
     char str1[512];
     char str2[512];
 
@@ -3162,7 +3383,7 @@ START_TEST(test_one_dec) {
 }
 END_TEST
 
-START_TEST(test_many_dec) {
+START_TEST(s21_sprintf_test_104) {
     char str1[512];
     char str2[512];
 
@@ -3173,7 +3394,7 @@ START_TEST(test_many_dec) {
 }
 END_TEST
 
-START_TEST(test_one_int) {
+START_TEST(s21_sprintf_test_105) {
     char str1[512];
     char str2[512];
 
@@ -3183,7 +3404,7 @@ START_TEST(test_one_int) {
 }
 END_TEST
 
-START_TEST(test_many_int) {
+START_TEST(s21_sprintf_test_106) {
     char str1[512];
     char str2[512];
 
@@ -3194,7 +3415,7 @@ START_TEST(test_many_int) {
 }
 END_TEST
 
-START_TEST(test_one_float) {
+START_TEST(s21_sprintf_test_107) {
     char str1[512];
     char str2[512];
 
@@ -3205,7 +3426,7 @@ START_TEST(test_one_float) {
 }
 END_TEST
 
-START_TEST(test_many_float) {
+START_TEST(s21_sprintf_test_108) {
     char str1[512];
     char str2[512];
 
@@ -3217,7 +3438,7 @@ START_TEST(test_many_float) {
 }
 END_TEST
 
-START_TEST(test_one_unsigned_dec) {
+START_TEST(s21_sprintf_test_109) {
     char str1[512];
     char str2[512];
 
@@ -3228,7 +3449,7 @@ START_TEST(test_one_unsigned_dec) {
 }
 END_TEST
 
-START_TEST(test_many_unsigned_dec) {
+START_TEST(s21_sprintf_test_110) {
     char str1[512];
     char str2[512];
 
@@ -3240,7 +3461,7 @@ START_TEST(test_many_unsigned_dec) {
 }
 END_TEST
 
-START_TEST(test_one_char_with_alignment_left) {
+START_TEST(s21_sprintf_test_111) {
     char str1[512];
     char str2[512];
 
@@ -3251,7 +3472,7 @@ START_TEST(test_one_char_with_alignment_left) {
 }
 END_TEST
 
-START_TEST(test_one_char_with_alignment_right) {
+START_TEST(s21_sprintf_test_112) {
     char str1[512];
     char str2[512];
 
@@ -3262,7 +3483,7 @@ START_TEST(test_one_char_with_alignment_right) {
 }
 END_TEST
 
-START_TEST(test_many_char_with_alignment) {
+START_TEST(s21_sprintf_test_113) {
     char str1[512];
     char str2[512];
 
@@ -3275,7 +3496,7 @@ START_TEST(test_many_char_with_alignment) {
 END_TEST
 
 // START HEX TEST
-START_TEST(test_one_hex_lower) {
+START_TEST(s21_sprintf_test_114) {
     char str1[512];
     char str2[512];
     ck_assert_int_eq(s21_sprintf(str1, "%x", (unsigned)INT32_MIN),
@@ -3289,7 +3510,7 @@ START_TEST(test_one_hex_lower) {
 }
 END_TEST
 
-START_TEST(test_one_hex_upper) {
+START_TEST(s21_sprintf_test_115) {
     char str1[512];
     char str2[512];
 
@@ -3304,7 +3525,7 @@ START_TEST(test_one_hex_upper) {
 }
 END_TEST
 
-START_TEST(test_many_hex_lower) {
+START_TEST(s21_sprintf_test_116) {
     char str1[512];
     char str2[512];
 
@@ -3315,7 +3536,7 @@ START_TEST(test_many_hex_lower) {
 }
 END_TEST
 
-START_TEST(test_many_hex_upper) {
+START_TEST(s21_sprintf_test_117) {
     char str1[512];
     char str2[512];
 
@@ -3328,7 +3549,7 @@ END_TEST
 // END HEX TEST
 
 // START HEX WITH ALIGNMENT
-START_TEST(test_one_hex_lower_with_alignment_left) {
+START_TEST(s21_sprintf_test_118) {
     char str1[512];
     char str2[512];
 
@@ -3343,7 +3564,7 @@ START_TEST(test_one_hex_lower_with_alignment_left) {
 }
 END_TEST
 
-START_TEST(test_one_hex_lower_with_alignment_right) {
+START_TEST(s21_sprintf_test_119) {
     char str1[512];
     char str2[512];
 
@@ -3358,7 +3579,7 @@ START_TEST(test_one_hex_lower_with_alignment_right) {
 }
 END_TEST
 
-START_TEST(test_one_hex_upper_with_alignment_left) {
+START_TEST(s21_sprintf_test_120) {
     char str1[512];
     char str2[512];
 
@@ -3373,7 +3594,7 @@ START_TEST(test_one_hex_upper_with_alignment_left) {
 }
 END_TEST
 
-START_TEST(test_one_hex_upper_with_alignment_right) {
+START_TEST(s21_sprintf_test_121) {
     char str1[512];
     char str2[512];
 
@@ -3388,7 +3609,7 @@ START_TEST(test_one_hex_upper_with_alignment_right) {
 }
 END_TEST
 
-START_TEST(test_many_hex_lower_with_alignment) {
+START_TEST(s21_sprintf_test_122) {
     char str1[512];
     char str2[512];
 
@@ -3399,7 +3620,7 @@ START_TEST(test_many_hex_lower_with_alignment) {
 }
 END_TEST
 
-START_TEST(test_many_hex_upper_with_alignment) {
+START_TEST(s21_sprintf_test_123) {
     char str1[512];
     char str2[512];
     ck_assert_int_eq(
@@ -3411,7 +3632,7 @@ END_TEST
 // START HEX WITH ALIGNMENT
 
 // START HEX TEST WITH #
-START_TEST(test_one_hex_with_hashtag) {
+START_TEST(s21_sprintf_test_124) {
     char str1[512];
     char str2[512];
 
@@ -3426,7 +3647,7 @@ START_TEST(test_one_hex_with_hashtag) {
 }
 END_TEST
 
-START_TEST(test_one_hex_upper_with_hashtag) {
+START_TEST(s21_sprintf_test_125) {
     char str1[512];
     char str2[512];
 
@@ -3441,7 +3662,7 @@ START_TEST(test_one_hex_upper_with_hashtag) {
 }
 END_TEST
 
-START_TEST(test_many_hex_lower_with_hashtag_and_alignm) {
+START_TEST(s21_sprintf_test_126) {
     char str1[512];
     char str2[512];
 
@@ -3453,7 +3674,7 @@ START_TEST(test_many_hex_lower_with_hashtag_and_alignm) {
 }
 END_TEST
 
-START_TEST(test_many_hex_upper_with_hashtag_and_alignm) {
+START_TEST(s21_sprintf_test_127) {
     char str1[512];
     char str2[512];
 
@@ -3467,7 +3688,7 @@ END_TEST
 // END HEX TEST WITH #
 
 // START HEX TEST with width *
-START_TEST(test_one_hex_lower_with_width_star) {
+START_TEST(s21_sprintf_test_128) {
     char str1[512];
     char str2[512];
 
@@ -3485,7 +3706,7 @@ START_TEST(test_one_hex_lower_with_width_star) {
 }
 END_TEST
 
-START_TEST(test_one_hex_upper_with_width_star) {
+START_TEST(s21_sprintf_test_129) {
     char str1[512];
     char str2[512];
 
@@ -3503,7 +3724,7 @@ START_TEST(test_one_hex_upper_with_width_star) {
 }
 END_TEST
 
-START_TEST(test_many_hex_lower_with_width_star_and_align_and_hashtag) {
+START_TEST(s21_sprintf_test_130) {
     char str1[512];
     char str2[512];
 
@@ -3515,7 +3736,7 @@ START_TEST(test_many_hex_lower_with_width_star_and_align_and_hashtag) {
 }
 END_TEST
 
-START_TEST(test_many_hex_upper_with_width_star) {
+START_TEST(s21_sprintf_test_131) {
     char str1[512];
     char str2[512];
 
@@ -3529,7 +3750,7 @@ END_TEST
 // END HEX TEST WITH Width *
 
 // START HEX TEST WITH precision
-START_TEST(test_one_hex_lower_with_precision) {
+START_TEST(s21_sprintf_test_132) {
     char str1[512];
     char str2[512];
 
@@ -3540,7 +3761,7 @@ START_TEST(test_one_hex_lower_with_precision) {
 }
 END_TEST
 
-START_TEST(test_one_hex_upper_with_precision) {
+START_TEST(s21_sprintf_test_133) {
     char str1[512];
     char str2[512];
 
@@ -3551,7 +3772,7 @@ START_TEST(test_one_hex_upper_with_precision) {
 }
 END_TEST
 
-START_TEST(test_many_hex_lower_with_precision_and_other) {
+START_TEST(s21_sprintf_test_134) {
     char str1[512];
     char str2[512];
     int a = s21_sprintf(
@@ -3565,7 +3786,7 @@ START_TEST(test_many_hex_lower_with_precision_and_other) {
 }
 END_TEST
 
-START_TEST(test_many_hex_upper_with_precision_and_other) {
+START_TEST(s21_sprintf_test_135) {
     char str1[512];
     char str2[512];
 
@@ -3583,7 +3804,7 @@ END_TEST
 // END HEX TEST WITH precision
 
 // START HEX TEST WITH Length
-START_TEST(test_one_hex_lower_with_length) {
+START_TEST(s21_sprintf_test_136) {
     char str1[512];
     char str2[512];
 
@@ -3605,7 +3826,7 @@ START_TEST(test_one_hex_lower_with_length) {
 }
 END_TEST
 
-START_TEST(test_one_hex_upper_with_length) {
+START_TEST(s21_sprintf_test_137) {
     char str1[512];
     char str2[512];
 
@@ -3627,7 +3848,7 @@ START_TEST(test_one_hex_upper_with_length) {
 }
 END_TEST
 
-START_TEST(test_sprintf1) {
+START_TEST(s21_sprintf_test_138) {
     char str1[512];
     char str2[512];
     char format[] = "%10ld";
@@ -3638,7 +3859,7 @@ START_TEST(test_sprintf1) {
 }
 END_TEST
 
-START_TEST(test_sprintf2) {
+START_TEST(s21_sprintf_test_139) {
     char str1[512];
     char str2[512];
     char format[] = "%1.1f";
@@ -3650,7 +3871,7 @@ START_TEST(test_sprintf2) {
 }
 END_TEST
 
-START_TEST(test_sprintf3) {
+START_TEST(s21_sprintf_test_140) {
     char str1[512];
     char str2[512];
     char format[] = "%8.3c";
@@ -3662,7 +3883,7 @@ START_TEST(test_sprintf3) {
 }
 END_TEST
 
-START_TEST(test_sprintf4) {
+START_TEST(s21_sprintf_test_141) {
     char str1[512];
     char str2[512];
     char format[] = "%+5.5d aboba";
@@ -3676,7 +3897,7 @@ START_TEST(test_sprintf4) {
 }
 END_TEST
 
-START_TEST(test_sprintf6) {
+START_TEST(s21_sprintf_test_142) {
     char str1[512];
     char str2[512];
     char format[] = "%7.7f";
@@ -3688,7 +3909,7 @@ START_TEST(test_sprintf6) {
 }
 END_TEST
 
-START_TEST(test_sprintf7) {
+START_TEST(s21_sprintf_test_143) {
     char str1[512];
     char str2[512];
     char format[] = "%7.4s";
@@ -3700,7 +3921,7 @@ START_TEST(test_sprintf7) {
 }
 END_TEST
 
-START_TEST(test_sprintf8) {
+START_TEST(s21_sprintf_test_144) {
     char str1[512];
     char str2[512];
     char format[] = "%6.6u";
@@ -3712,7 +3933,7 @@ START_TEST(test_sprintf8) {
 }
 END_TEST
 
-START_TEST(test_sprintf9) {
+START_TEST(s21_sprintf_test_145) {
     char str1[512];
     char str2[512];
     char format[] = "%li%ld%lu";
@@ -3724,7 +3945,7 @@ START_TEST(test_sprintf9) {
 }
 END_TEST
 
-START_TEST(test_sprintf10) {
+START_TEST(s21_sprintf_test_146) {
     char str1[512];
     char str2[512];
     char format[] = "%hi%hd%hu";
@@ -3736,7 +3957,7 @@ START_TEST(test_sprintf10) {
 }
 END_TEST
 
-START_TEST(test_sprintf11) {
+START_TEST(s21_sprintf_test_147) {
     char str1[512];
     char str2[512];
     char format[] = "%+li%+lu%+d%+lf";
@@ -3748,7 +3969,7 @@ START_TEST(test_sprintf11) {
 }
 END_TEST
 
-START_TEST(test_sprintf12) {
+START_TEST(s21_sprintf_test_148) {
     char str1[512];
     char str2[512];
     char format[] = "%-11.11li%-35.5lu%-3.5ld%33.19Lf";
@@ -3762,7 +3983,7 @@ START_TEST(test_sprintf12) {
 }
 END_TEST
 
-START_TEST(test_sprintf14) {
+START_TEST(s21_sprintf_test_149) {
     char str1[512];
     char str2[512];
     char format[] = "% 0.0li% 0.0lu% 0.0ld % 0.0lf";
@@ -3775,7 +3996,7 @@ START_TEST(test_sprintf14) {
 }
 END_TEST
 
-START_TEST(test_sprintf15) {
+START_TEST(s21_sprintf_test_150) {
     char str1[512];
     char str2[512];
     char format[] = "% 0.0hi% 0.0hu% 0.0hd % 0.0hf";
@@ -3788,7 +4009,7 @@ START_TEST(test_sprintf15) {
 }
 END_TEST
 
-START_TEST(test_sprintf16) {
+START_TEST(s21_sprintf_test_151) {
     char str1[512];
     char str2[512];
     char format[] = "% c";
@@ -3800,7 +4021,7 @@ START_TEST(test_sprintf16) {
 }
 END_TEST
 
-START_TEST(test_sprintf17) {
+START_TEST(s21_sprintf_test_152) {
     char str1[512];
     char str2[512];
     char format[] = "% s";
@@ -3812,7 +4033,7 @@ START_TEST(test_sprintf17) {
 }
 END_TEST
 
-START_TEST(test_sprintf18) {
+START_TEST(s21_sprintf_test_153) {
     char str1[512];
     char str2[512];
     char format[] = "% s% c";
@@ -3824,7 +4045,7 @@ START_TEST(test_sprintf18) {
 }
 END_TEST
 
-START_TEST(test_sprintf19) {
+START_TEST(s21_sprintf_test_154) {
     char str1[512];
     char str2[512];
     char format[] = "%210s";
@@ -3836,7 +4057,7 @@ START_TEST(test_sprintf19) {
 }
 END_TEST
 
-START_TEST(test_sprintf20) {
+START_TEST(s21_sprintf_test_155) {
     char str1[512];
     char str2[512];
     char format[] = "%-115s";
@@ -3848,7 +4069,7 @@ START_TEST(test_sprintf20) {
 }
 END_TEST
 
-START_TEST(test_sprintf24) {
+START_TEST(s21_sprintf_test_156) {
     char str1[512];
     char str2[512];
     char format[] = "%+2.1c%+4.2d%+5.4i%+10.2f%+55.55s%+1.1u";
@@ -3863,7 +4084,7 @@ START_TEST(test_sprintf24) {
 }
 END_TEST
 
-START_TEST(test_sprintf25) {
+START_TEST(s21_sprintf_test_157) {
     char str1[512];
     char str2[512];
     char format[] = "%.f";
@@ -3875,29 +4096,29 @@ START_TEST(test_sprintf25) {
 }
 END_TEST
 
-// START_TEST(test_sprintf26) {
-//     char str1[512];
-//     char str2[512];
-//     char format[] = "%%";
+START_TEST(s21_sprintf_test_158) {
+    char str1[512];
+    char str2[512];
+    char format[] = "%%";
 
-//     ck_assert_int_eq(s21_sprintf(str1, format), sprintf(str2, format));
+    ck_assert_int_eq(s21_sprintf(str1, format), sprintf(str2, format));
 
-//     ck_assert_str_eq(str1, str2);
-// }
-// END_TEST
+    ck_assert_str_eq(str1, str2);
+}
+END_TEST
 
-// START_TEST(test_sprintf27) {
-//     char str1[512];
-//     char str2[512];
-//     char format[] = "%%%%%%%%";
+START_TEST(s21_sprintf_test_159) {
+    char str1[512];
+    char str2[512];
+    char format[] = "%%%%%%%%";
 
-//     ck_assert_int_eq(s21_sprintf(str1, format), sprintf(str2, format));
+    ck_assert_int_eq(s21_sprintf(str1, format), sprintf(str2, format));
 
-//     ck_assert_str_eq(str1, str2);
-// }
-// END_TEST
+    ck_assert_str_eq(str1, str2);
+}
+END_TEST
 
-START_TEST(test_sprintf28) {
+START_TEST(s21_sprintf_test_160) {
     char str1[512];
     char str2[512];
     int n1;
@@ -3911,7 +4132,7 @@ START_TEST(test_sprintf28) {
 }
 END_TEST
 
-START_TEST(test_sprintf29) {
+START_TEST(s21_sprintf_test_161) {
     char str1[512];
     char str2[512];
     char format[] = "%-.f";
@@ -3923,7 +4144,7 @@ START_TEST(test_sprintf29) {
 }
 END_TEST
 
-START_TEST(test_sprintf30) {
+START_TEST(s21_sprintf_test_162) {
     char str1[512];
     char str2[512];
     char format[] = "%-.1d";
@@ -3935,7 +4156,7 @@ START_TEST(test_sprintf30) {
 }
 END_TEST
 
-START_TEST(test_sprintf31) {
+START_TEST(s21_sprintf_test_163) {
     char str1[512];
     char str2[512];
     char format[] = "%e";
@@ -3946,7 +4167,7 @@ START_TEST(test_sprintf31) {
 }
 END_TEST
 
-START_TEST(test_sprintf32) {
+START_TEST(s21_sprintf_test_164) {
     char str1[512];
     char str2[512];
     char format[] = "%e%e%e%e";
@@ -3959,7 +4180,7 @@ START_TEST(test_sprintf32) {
 }
 END_TEST
 
-START_TEST(test_sprintf33) {
+START_TEST(s21_sprintf_test_165) {
     char str1[512];
     char str2[512];
     char format[] = "%Le";
@@ -3971,7 +4192,7 @@ START_TEST(test_sprintf33) {
 }
 END_TEST
 
-START_TEST(test_sprintf35) {
+START_TEST(s21_sprintf_test_166) {
     char str1[512];
     char str2[512];
     char format[] = "%.10e";
@@ -3983,7 +4204,7 @@ START_TEST(test_sprintf35) {
 }
 END_TEST
 
-START_TEST(test_sprintf36) {
+START_TEST(s21_sprintf_test_167) {
     char str1[512];
     char str2[512];
     char format[] = "%5.3e%3.2e%lf";
@@ -3995,7 +4216,7 @@ START_TEST(test_sprintf36) {
 }
 END_TEST
 
-START_TEST(test_sprintf37) {
+START_TEST(s21_sprintf_test_168) {
     char str1[512];
     char str2[512];
     char format[] = "%E";
@@ -4007,7 +4228,7 @@ START_TEST(test_sprintf37) {
 }
 END_TEST
 
-START_TEST(test_sprintf38) {
+START_TEST(s21_sprintf_test_169) {
     char str1[512];
     char str2[512];
     char format[] = "%E%E%E";
@@ -4019,7 +4240,7 @@ START_TEST(test_sprintf38) {
 }
 END_TEST
 
-START_TEST(test_sprintf39) {
+START_TEST(s21_sprintf_test_170) {
     char str1[512];
     char str2[512];
     char format[] = "%e ABOBA %Lf %Lf %Le";
@@ -4033,7 +4254,7 @@ START_TEST(test_sprintf39) {
 }
 END_TEST
 
-START_TEST(test_sprintf40) {
+START_TEST(s21_sprintf_test_171) {
     char str1[512];
     char str2[512];
     char format[] = "%#e Floppa %#E%#f";
@@ -4045,7 +4266,7 @@ START_TEST(test_sprintf40) {
 }
 END_TEST
 
-START_TEST(test_sprintf41) {
+START_TEST(s21_sprintf_test_172) {
     char str1[512];
     char str2[512];
     char format[] = "%.Lf";
@@ -4057,7 +4278,7 @@ START_TEST(test_sprintf41) {
 }
 END_TEST
 
-START_TEST(test_sprintf42) {
+START_TEST(s21_sprintf_test_173) {
     char str1[512];
     char str2[512];
     char format[] = "%#5p";
@@ -4068,7 +4289,7 @@ START_TEST(test_sprintf42) {
 }
 END_TEST
 
-START_TEST(test_sprintf43) {
+START_TEST(s21_sprintf_test_174) {
     char str1[512];
     char str2[512];
     char format[] = "%.5o";
@@ -4080,7 +4301,7 @@ START_TEST(test_sprintf43) {
 }
 END_TEST
 
-START_TEST(test_sprintf44) {
+START_TEST(s21_sprintf_test_175) {
     char str1[512];
     char str2[512];
     char format[] = "%#5lX";
@@ -4092,7 +4313,7 @@ START_TEST(test_sprintf44) {
 }
 END_TEST
 
-START_TEST(g_trailing_zero) {
+START_TEST(s21_sprintf_test_176) {
     char str1[512];
     char str2[512];
     char format[] = "%g";
@@ -4104,7 +4325,7 @@ START_TEST(g_trailing_zero) {
 }
 END_TEST
 
-START_TEST(g_large) {
+START_TEST(s21_sprintf_test_177) {
     char str1[512];
     char str2[512];
     char format[] = "%g";
@@ -4115,7 +4336,8 @@ START_TEST(g_large) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(g_small) {
+
+START_TEST(s21_sprintf_test_178) {
     char str1[512];
     char str2[512];
     char format[] = "%g";
@@ -4126,7 +4348,8 @@ START_TEST(g_small) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(g_precision) {
+
+START_TEST(s21_sprintf_test_179) {
     char str1[512];
     char str2[512];
     char format[] = "%.5g";
@@ -4137,7 +4360,8 @@ START_TEST(g_precision) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(g_precision_zero) {
+
+START_TEST(s21_sprintf_test_180) {
     char str1[512];
     char str2[512];
     char format[] = "%.0g";
@@ -4148,7 +4372,8 @@ START_TEST(g_precision_zero) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(g_precision_missing) {
+
+START_TEST(s21_sprintf_test_181) {
     char str1[512];
     char str2[512];
     char format[] = "%.g";
@@ -4159,7 +4384,7 @@ START_TEST(g_precision_missing) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(g_many_zeroes_in_front) {
+START_TEST(s21_sprintf_test_182) {
     char str1[512];
     char str2[512];
     char format[] = "%.g";
@@ -4170,7 +4395,8 @@ START_TEST(g_many_zeroes_in_front) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(g_one_zero) {
+
+START_TEST(s21_sprintf_test_183) {
     char str1[512];
     char str2[512];
     char format[] = "%g";
@@ -4181,7 +4407,8 @@ START_TEST(g_one_zero) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(g_zero) {
+
+START_TEST(s21_sprintf_test_184) {
     char str1[512];
     char str2[512];
     char format[] = "%.5g";
@@ -4193,7 +4420,7 @@ START_TEST(g_zero) {
 }
 END_TEST
 
-START_TEST(g_mantiss) {
+START_TEST(s21_sprintf_test_185) {
     char str1[512];
     char str2[512];
     char format[] = "%g";
@@ -4204,7 +4431,8 @@ START_TEST(g_mantiss) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(g_mantiss_flags) {
+
+START_TEST(s21_sprintf_test_186) {
     char str1[512];
     char str2[512];
     char format[] = "%5.8g";
@@ -4215,7 +4443,8 @@ START_TEST(g_mantiss_flags) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(g_short_no_mantiss) {
+
+START_TEST(s21_sprintf_test_187) {
     char str1[512];
     char str2[512];
     char format[] = "%g";
@@ -4226,7 +4455,8 @@ START_TEST(g_short_no_mantiss) {
     ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(LG) {
+
+START_TEST(s21_sprintf_test_188) {
     char str1[512];
     char str2[512];
     char format[] = "%LG";
@@ -4238,7 +4468,7 @@ START_TEST(LG) {
 }
 END_TEST
 
-START_TEST(g_many) {
+START_TEST(s21_sprintf_test_189) {
     char str1[512];
     char str2[512];
     char format[] = "%LG %g %G %Lg %.5g";
@@ -4256,7 +4486,7 @@ START_TEST(g_many) {
 }
 END_TEST
 
-START_TEST(wide_char) {
+START_TEST(s21_sprintf_test_190) {
     char str1[512];
     char str2[512];
 
@@ -4268,7 +4498,7 @@ START_TEST(wide_char) {
     ck_assert_int_eq(a, b);
 }
 
-START_TEST(width_char) {
+START_TEST(s21_sprintf_test_191) {
     char str1[512];
     char str2[512];
 
@@ -4279,7 +4509,7 @@ START_TEST(width_char) {
     ck_assert_str_eq(str1, str2);
     ck_assert_int_eq(a, b);
 }
-START_TEST(minus_wide_char) {
+START_TEST(s21_sprintf_test_192) {
     char str1[512];
     char str2[512];
 
@@ -4291,7 +4521,8 @@ START_TEST(minus_wide_char) {
     ck_assert_int_eq(a, b);
 }
 END_TEST
-START_TEST(wide_string) {
+
+START_TEST(s21_sprintf_test_193) {
     char str1[512];
     char str2[512];
 
@@ -4304,7 +4535,7 @@ START_TEST(wide_string) {
 }
 END_TEST
 
-START_TEST(wide_string1) {
+START_TEST(s21_sprintf_test_194) {
     char str1[512];
     char str2[512];
 
@@ -4317,7 +4548,7 @@ START_TEST(wide_string1) {
 }
 END_TEST
 
-START_TEST(wide_string2) {
+START_TEST(s21_sprintf_test_195) {
     char str1[512];
     char str2[512];
 
@@ -4330,7 +4561,7 @@ START_TEST(wide_string2) {
 }
 END_TEST
 
-START_TEST(wide_string3) {
+START_TEST(s21_sprintf_test_196) {
     char str1[512];
     char str2[512];
 
@@ -4504,6 +4735,13 @@ Suite *s21_strncpy_ste(void) {
   tcase_add_test(tc_core, s21_strncpy_test_6);
   tcase_add_test(tc_core, s21_strncpy_test_7);
   tcase_add_test(tc_core, s21_strncpy_test_8);
+  tcase_add_test(tc_core, s21_strncpy_test_9);
+  tcase_add_test(tc_core, s21_strncpy_test_10);
+  tcase_add_test(tc_core, s21_strncpy_test_11);
+  tcase_add_test(tc_core, s21_strncpy_test_12);
+  tcase_add_test(tc_core, s21_strncpy_test_13);
+  tcase_add_test(tc_core, s21_strncpy_test_14);
+  tcase_add_test(tc_core, s21_strncpy_test_15);
   suite_add_tcase(s, tc_core);
 
   return s;
@@ -4525,6 +4763,13 @@ Suite *s21_strncmp_ste(void) {
   tcase_add_test(tc_core, s21_strncmp_test_8);
   tcase_add_test(tc_core, s21_strncmp_test_9);
   tcase_add_test(tc_core, s21_strncmp_test_10);
+  tcase_add_test(tc_core, s21_strncmp_test_11);
+  tcase_add_test(tc_core, s21_strncmp_test_12);
+  tcase_add_test(tc_core, s21_strncmp_test_13);
+  tcase_add_test(tc_core, s21_strncmp_test_14);
+  tcase_add_test(tc_core, s21_strncmp_test_15);
+  tcase_add_test(tc_core, s21_strncmp_test_17);
+  tcase_add_test(tc_core, s21_strncmp_test_18);
   suite_add_tcase(s, tc_core);
 
   return s;
@@ -4851,196 +5096,193 @@ Suite *s21_sprintf_ste(void) {
   tcase_add_test(tc_core, s21_sprintf_test_13);
   tcase_add_test(tc_core, s21_sprintf_test_14);
   tcase_add_test(tc_core, s21_sprintf_test_15);
+  tcase_add_test(tc_core, s21_sprintf_test_int_16);
+  tcase_add_test(tc_core, s21_sprintf_test_int_17);
+  tcase_add_test(tc_core, s21_sprintf_test_int_18);
+  tcase_add_test(tc_core, s21_sprintf_test_int_19);
+  tcase_add_test(tc_core, s21_sprintf_test_int_20);
+  tcase_add_test(tc_core, s21_sprintf_test_int_21);
+  tcase_add_test(tc_core, s21_sprintf_test_int_22);
+  tcase_add_test(tc_core, s21_sprintf_test_int_23);
+  tcase_add_test(tc_core, s21_sprintf_test_int_24);
+  tcase_add_test(tc_core, s21_sprintf_test_int_25);
+  tcase_add_test(tc_core, s21_sprintf_test_int_26);
+  tcase_add_test(tc_core, s21_sprintf_test_int_27);
+  tcase_add_test(tc_core, s21_sprintf_test_int_28);
+  tcase_add_test(tc_core, s21_sprintf_test_int_29);
+  tcase_add_test(tc_core, s21_sprintf_test_val_30);
+  tcase_add_test(tc_core, s21_sprintf_test_val_31);
+  tcase_add_test(tc_core, s21_sprintf_test_val_32);
+  tcase_add_test(tc_core, s21_sprintf_test_val_33);
+  tcase_add_test(tc_core, s21_sprintf_test_val_34);
+  tcase_add_test(tc_core, s21_sprintf_test_val_35);
+  tcase_add_test(tc_core, s21_sprintf_test_val_36);
+  tcase_add_test(tc_core, s21_sprintf_test_val_37);
+  tcase_add_test(tc_core, s21_sprintf_test_val_38);
+  tcase_add_test(tc_core, s21_sprintf_test_octal_39);
+  tcase_add_test(tc_core, s21_sprintf_test_octal_40);
+  tcase_add_test(tc_core, s21_sprintf_test_octal_41);
+  tcase_add_test(tc_core, s21_sprintf_test_octal_42);
+  tcase_add_test(tc_core, s21_sprintf_test_octal_43);
+  tcase_add_test(tc_core, s21_sprintf_test_octal_44);
+  tcase_add_test(tc_core, s21_sprintf_test_octal_45);
+  tcase_add_test(tc_core, s21_sprintf_test_octal_46);
+  tcase_add_test(tc_core, s21_sprintf_test_octal_47);
+  tcase_add_test(tc_core, s21_sprintf_test_zero_48);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_49);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_50);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_51);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_52);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_53);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_54);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_55);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_56);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_57);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_58);
+  tcase_add_test(tc_core, s21_sprintf_test_hex_59);
+  tcase_add_test(tc_core, s21_sprintf_test_60);
+  tcase_add_test(tc_core, s21_sprintf_test_61);
+  tcase_add_test(tc_core, s21_sprintf_test_62);
+  tcase_add_test(tc_core, s21_sprintf_test_63);
+  tcase_add_test(tc_core, s21_sprintf_test_64);
+  tcase_add_test(tc_core, s21_sprintf_test_65);
+  tcase_add_test(tc_core, s21_sprintf_test_string_66);
+  tcase_add_test(tc_core, s21_sprintf_test_string_67);
+  tcase_add_test(tc_core, s21_sprintf_test_string_68);
+  tcase_add_test(tc_core, s21_sprintf_test_string_69);
+  tcase_add_test(tc_core, s21_sprintf_test_string_70);
+  tcase_add_test(tc_core, s21_sprintf_test_string_71);
+  tcase_add_test(tc_core, s21_sprintf_test_ptr_72);
+  tcase_add_test(tc_core, s21_sprintf_test_ptr_73);
+  tcase_add_test(tc_core, s21_sprintf_test_ptr_74);
+  tcase_add_test(tc_core, s21_sprintf_test_ptr_75);
+  tcase_add_test(tc_core, s21_sprintf_test_76);
+  tcase_add_test(tc_core, s21_sprintf_test_77);
+  tcase_add_test(tc_core, s21_sprintf_test_78);
+  tcase_add_test(tc_core, s21_sprintf_test_79);
+  tcase_add_test(tc_core, s21_sprintf_test_80);
+  tcase_add_test(tc_core, s21_sprintf_test_81);
+  tcase_add_test(tc_core, s21_sprintf_test_82);
+  tcase_add_test(tc_core, s21_sprintf_test_83);
+  tcase_add_test(tc_core, s21_sprintf_test_84);
+  tcase_add_test(tc_core, s21_sprintf_test_85);
+  tcase_add_test(tc_core, s21_sprintf_test_86);
+  tcase_add_test(tc_core, s21_sprintf_test_87);
+  tcase_add_test(tc_core, s21_sprintf_test_88);
+  tcase_add_test(tc_core, s21_sprintf_test_89);
+  tcase_add_test(tc_core, s21_sprintf_test_90);
+  tcase_add_test(tc_core, s21_sprintf_test_91);
+  tcase_add_test(tc_core, s21_sprintf_test_92);
+  tcase_add_test(tc_core, s21_sprintf_test_93);
+  tcase_add_test(tc_core, s21_sprintf_test_94);
+  tcase_add_test(tc_core, s21_sprintf_test_95);
+  tcase_add_test(tc_core, s21_sprintf_test_96);
+  tcase_add_test(tc_core, s21_sprintf_test_97);
+  tcase_add_test(tc_core, s21_sprintf_test_98);
+  tcase_add_test(tc_core, s21_sprintf_test_99);
+  tcase_add_test(tc_core, s21_sprintf_test_100);
+  tcase_add_test(tc_core, s21_sprintf_test_101);
+  tcase_add_test(tc_core, s21_sprintf_test_102);
+  tcase_add_test(tc_core, s21_sprintf_test_103);
+  tcase_add_test(tc_core, s21_sprintf_test_104);
+  tcase_add_test(tc_core, s21_sprintf_test_105);
+  tcase_add_test(tc_core, s21_sprintf_test_106);
+  tcase_add_test(tc_core, s21_sprintf_test_107);
+  tcase_add_test(tc_core, s21_sprintf_test_108);
+  tcase_add_test(tc_core, s21_sprintf_test_109);
+  tcase_add_test(tc_core, s21_sprintf_test_110);
+  tcase_add_test(tc_core, s21_sprintf_test_111);
+  tcase_add_test(tc_core, s21_sprintf_test_112);
+  tcase_add_test(tc_core, s21_sprintf_test_113);
+  tcase_add_test(tc_core, s21_sprintf_test_114);
+  tcase_add_test(tc_core, s21_sprintf_test_115);
+  tcase_add_test(tc_core, s21_sprintf_test_116);
+  tcase_add_test(tc_core, s21_sprintf_test_117);
+  tcase_add_test(tc_core, s21_sprintf_test_118);
+  tcase_add_test(tc_core, s21_sprintf_test_119);
+  tcase_add_test(tc_core, s21_sprintf_test_120);
+  tcase_add_test(tc_core, s21_sprintf_test_121);
+  tcase_add_test(tc_core, s21_sprintf_test_122);
+  tcase_add_test(tc_core, s21_sprintf_test_123);
+  tcase_add_test(tc_core, s21_sprintf_test_124);
+  tcase_add_test(tc_core, s21_sprintf_test_125);
+  tcase_add_test(tc_core, s21_sprintf_test_126);
+  tcase_add_test(tc_core, s21_sprintf_test_127);
+  tcase_add_test(tc_core, s21_sprintf_test_128);
+  tcase_add_test(tc_core, s21_sprintf_test_129);
+  tcase_add_test(tc_core, s21_sprintf_test_130);
+  tcase_add_test(tc_core, s21_sprintf_test_131);
+  tcase_add_test(tc_core, s21_sprintf_test_132);
+  tcase_add_test(tc_core, s21_sprintf_test_133);
+  tcase_add_test(tc_core, s21_sprintf_test_134);
+  tcase_add_test(tc_core, s21_sprintf_test_135);
+  tcase_add_test(tc_core, s21_sprintf_test_136);
+  tcase_add_test(tc_core, s21_sprintf_test_137);
+  tcase_add_test(tc_core, s21_sprintf_test_138);
+  tcase_add_test(tc_core, s21_sprintf_test_139);
+  tcase_add_test(tc_core, s21_sprintf_test_140);
+  tcase_add_test(tc_core, s21_sprintf_test_141);
+  tcase_add_test(tc_core, s21_sprintf_test_142);
+  tcase_add_test(tc_core, s21_sprintf_test_143);
+  tcase_add_test(tc_core, s21_sprintf_test_144);
+  tcase_add_test(tc_core, s21_sprintf_test_145);
+  tcase_add_test(tc_core, s21_sprintf_test_146);
+  tcase_add_test(tc_core, s21_sprintf_test_147);
+  tcase_add_test(tc_core, s21_sprintf_test_148);
+  tcase_add_test(tc_core, s21_sprintf_test_149);
+  tcase_add_test(tc_core, s21_sprintf_test_150);
+  tcase_add_test(tc_core, s21_sprintf_test_151);
+  tcase_add_test(tc_core, s21_sprintf_test_152);
+  tcase_add_test(tc_core, s21_sprintf_test_153);
+  tcase_add_test(tc_core, s21_sprintf_test_154);
+  tcase_add_test(tc_core, s21_sprintf_test_155);
+  tcase_add_test(tc_core, s21_sprintf_test_156);
+  tcase_add_test(tc_core, s21_sprintf_test_157);
+  tcase_add_test(tc_core, s21_sprintf_test_158);
+  tcase_add_test(tc_core, s21_sprintf_test_159);
+  tcase_add_test(tc_core, s21_sprintf_test_160);
+  tcase_add_test(tc_core, s21_sprintf_test_161);
+  tcase_add_test(tc_core, s21_sprintf_test_162);
+  tcase_add_test(tc_core, s21_sprintf_test_163);
+  tcase_add_test(tc_core, s21_sprintf_test_164);
+  tcase_add_test(tc_core, s21_sprintf_test_165);
+  tcase_add_test(tc_core, s21_sprintf_test_166);
+  tcase_add_test(tc_core, s21_sprintf_test_167);
+  tcase_add_test(tc_core, s21_sprintf_test_168);
+  tcase_add_test(tc_core, s21_sprintf_test_169);
+  tcase_add_test(tc_core, s21_sprintf_test_170);
+  tcase_add_test(tc_core, s21_sprintf_test_171);
+  tcase_add_test(tc_core, s21_sprintf_test_172);
+  tcase_add_test(tc_core, s21_sprintf_test_173);
+  tcase_add_test(tc_core, s21_sprintf_test_174);
+  tcase_add_test(tc_core, s21_sprintf_test_175);
+  tcase_add_test(tc_core, s21_sprintf_test_176);
+  tcase_add_test(tc_core, s21_sprintf_test_177);
+  tcase_add_test(tc_core, s21_sprintf_test_178);
+  tcase_add_test(tc_core, s21_sprintf_test_179);
+  tcase_add_test(tc_core, s21_sprintf_test_180);
+  tcase_add_test(tc_core, s21_sprintf_test_181);
+  tcase_add_test(tc_core, s21_sprintf_test_182);
+  tcase_add_test(tc_core, s21_sprintf_test_182);
+  tcase_add_test(tc_core, s21_sprintf_test_183);
+  tcase_add_test(tc_core, s21_sprintf_test_184);
+  tcase_add_test(tc_core, s21_sprintf_test_185);
+  tcase_add_test(tc_core, s21_sprintf_test_186);
+  tcase_add_test(tc_core, s21_sprintf_test_187);
+  tcase_add_test(tc_core, s21_sprintf_test_188);
+  tcase_add_test(tc_core, s21_sprintf_test_189);
+  tcase_add_test(tc_core, s21_sprintf_test_190);
+  tcase_add_test(tc_core, s21_sprintf_test_191);
+  tcase_add_test(tc_core, s21_sprintf_test_192);
+  tcase_add_test(tc_core, s21_sprintf_test_193);
+  tcase_add_test(tc_core, s21_sprintf_test_194);
+  tcase_add_test(tc_core, s21_sprintf_test_195);
+  tcase_add_test(tc_core, s21_sprintf_test_195);
+  tcase_add_test(tc_core, s21_sprintf_test_196);
+
   suite_add_tcase(s, tc_core);
 
   return s;
-}
-
-Suite *suite_sprintf(void) {
-    Suite *s = suite_create("suite_sprintf");
-    TCase *tc = tcase_create("sprintf_tc");
-    tcase_add_test(tc, simple_int);
-    tcase_add_test(tc, precise_int);
-    tcase_add_test(tc, width_int);
-    tcase_add_test(tc, minus_width_int);
-    tcase_add_test(tc, plus_width_int);
-    tcase_add_test(tc, padding_int);
-    tcase_add_test(tc, star_width_int);
-    tcase_add_test(tc, star_precision_int);
-    tcase_add_test(tc, many_flags_many_ints);
-    tcase_add_test(tc, flags_long_int);
-    tcase_add_test(tc, flags_short_int);
-    tcase_add_test(tc, flags_another_long_int);
-    tcase_add_test(tc, zero_precision_zero_int);
-    tcase_add_test(tc, space_flag_int);
-    tcase_add_test(tc, unsigned_val);
-    tcase_add_test(tc, unsigned_val_width);
-    tcase_add_test(tc, unsigned_val_flags);
-    tcase_add_test(tc, unsigned_val_precision);
-    tcase_add_test(tc, unsigned_val_many_flags);
-    tcase_add_test(tc, unsigned_val_short);
-    tcase_add_test(tc, unsigned_val_long);
-    tcase_add_test(tc, unsigned_val_many);
-    tcase_add_test(tc, octal);
-    tcase_add_test(tc, octal_width);
-    tcase_add_test(tc, octal_flags);
-    tcase_add_test(tc, octal_precision);
-    tcase_add_test(tc, octal_many_flags);
-    tcase_add_test(tc, octal_short);
-    tcase_add_test(tc, octal_long);
-    tcase_add_test(tc, octal_many);
-    tcase_add_test(tc, octal_zero);
-    tcase_add_test(tc, octal_hash);
-    tcase_add_test(tc, unsigned_zero);
-    tcase_add_test(tc, hex_width);
-    tcase_add_test(tc, hex_flags);
-    tcase_add_test(tc, hex_precision);
-    tcase_add_test(tc, hex_many);
-    tcase_add_test(tc, hex_many_flags);
-    tcase_add_test(tc, hex_zero);
-    tcase_add_test(tc, hex_huge);
-    tcase_add_test(tc, hex_short);
-    tcase_add_test(tc, hex_long);
-    tcase_add_test(tc, hex_one_longer_width);
-    tcase_add_test(tc, hex_two_longer_width);
-    tcase_add_test(tc, one_char);
-    tcase_add_test(tc, one_precision);
-    tcase_add_test(tc, one_flags);
-    tcase_add_test(tc, one_width);
-    tcase_add_test(tc, one_many);
-    tcase_add_test(tc, one_many_flags);
-    tcase_add_test(tc, string);
-    tcase_add_test(tc, string_precision);
-    tcase_add_test(tc, string_width);
-    tcase_add_test(tc, string_flags);
-    tcase_add_test(tc, string_long);
-    tcase_add_test(tc, string_many);
-    tcase_add_test(tc, ptr);
-    tcase_add_test(tc, ptr_width);
-    tcase_add_test(tc, ptr_precision);
-    tcase_add_test(tc, null_ptr);
-    tcase_add_test(tc, n_specifier);
-    tcase_add_test(tc, string_width_huge);
-    tcase_add_test(tc, float_precision);
-    tcase_add_test(tc, float_width);
-    tcase_add_test(tc, float_precision_zero);
-    tcase_add_test(tc, float_precision_empty);
-    tcase_add_test(tc, float_precision_huge);
-    tcase_add_test(tc, float_precision_huge_negative);
-    tcase_add_test(tc, float_huge);
-    tcase_add_test(tc, float_flags);
-    tcase_add_test(tc, float_many);
-    tcase_add_test(tc, e_precision);
-    tcase_add_test(tc, e_precision_zero);
-    tcase_add_test(tc, e_precision_empty);
-    tcase_add_test(tc, e_precision_huge);
-    tcase_add_test(tc, e_precision_huge_negative);
-    tcase_add_test(tc, e_huge);
-    tcase_add_test(tc, e_many);
-    tcase_add_test(tc, e_width);
-    tcase_add_test(tc, e_flags);
-    tcase_add_test(tc, E_int);
-    tcase_add_test(tc, all_empty);
-    tcase_add_test(tc, empty_format_and_parameters);
-    tcase_add_test(tc, test_one_char);
-    tcase_add_test(tc, test_many_char);
-    tcase_add_test(tc, test_one_string);
-    tcase_add_test(tc, test_many_string);
-    tcase_add_test(tc, test_one_dec);
-    tcase_add_test(tc, test_many_dec);
-    tcase_add_test(tc, test_one_int);
-    tcase_add_test(tc, test_many_int);
-    tcase_add_test(tc, test_one_float);
-    tcase_add_test(tc, test_many_float);
-    tcase_add_test(tc, test_one_unsigned_dec);
-    tcase_add_test(tc, test_many_unsigned_dec);
-    tcase_add_test(tc, test_one_char_with_alignment_left);
-    tcase_add_test(tc, test_one_char_with_alignment_right);
-    tcase_add_test(tc, test_many_char_with_alignment);
-    tcase_add_test(tc, test_one_hex_lower);
-    tcase_add_test(tc, test_one_hex_upper);
-    tcase_add_test(tc, test_many_hex_lower);
-    tcase_add_test(tc, test_many_hex_upper);
-    tcase_add_test(tc, test_one_hex_lower_with_alignment_left);
-    tcase_add_test(tc, test_one_hex_lower_with_alignment_right);
-    tcase_add_test(tc, test_one_hex_upper_with_alignment_left);
-    tcase_add_test(tc, test_one_hex_upper_with_alignment_right);
-    tcase_add_test(tc, test_many_hex_lower_with_alignment);
-    tcase_add_test(tc, test_many_hex_upper_with_alignment);
-    tcase_add_test(tc, test_one_hex_with_hashtag);
-    tcase_add_test(tc, test_one_hex_upper_with_hashtag);
-    tcase_add_test(tc, test_many_hex_lower_with_hashtag_and_alignm);
-    tcase_add_test(tc, test_many_hex_upper_with_hashtag_and_alignm);
-    tcase_add_test(tc, test_one_hex_lower_with_width_star);
-    tcase_add_test(tc, test_one_hex_upper_with_width_star);
-    tcase_add_test(tc,
-                   test_many_hex_lower_with_width_star_and_align_and_hashtag);
-    tcase_add_test(tc, test_many_hex_upper_with_width_star);
-    tcase_add_test(tc, test_one_hex_lower_with_precision);
-    tcase_add_test(tc, test_one_hex_upper_with_precision);
-    tcase_add_test(tc, test_many_hex_lower_with_precision_and_other);
-    tcase_add_test(tc, test_many_hex_upper_with_precision_and_other);
-    tcase_add_test(tc, test_one_hex_lower_with_length);
-    tcase_add_test(tc, test_one_hex_upper_with_length);
-    tcase_add_test(tc, test_sprintf1);
-    tcase_add_test(tc, test_sprintf2);
-    tcase_add_test(tc, test_sprintf3);
-    tcase_add_test(tc, test_sprintf4);
-    tcase_add_test(tc, test_sprintf6);
-    tcase_add_test(tc, test_sprintf7);
-    tcase_add_test(tc, test_sprintf8);
-    tcase_add_test(tc, test_sprintf9);
-    tcase_add_test(tc, test_sprintf10);
-    tcase_add_test(tc, test_sprintf11);
-    tcase_add_test(tc, test_sprintf12);
-    tcase_add_test(tc, test_sprintf14);
-    tcase_add_test(tc, test_sprintf15);
-    tcase_add_test(tc, test_sprintf16);
-    tcase_add_test(tc, test_sprintf17);
-    tcase_add_test(tc, test_sprintf18);
-    tcase_add_test(tc, test_sprintf19);
-    tcase_add_test(tc, test_sprintf20);
-    tcase_add_test(tc, test_sprintf24);
-    tcase_add_test(tc, test_sprintf25);
-    tcase_add_test(tc, test_sprintf28);
-    tcase_add_test(tc, test_sprintf29);
-    tcase_add_test(tc, test_sprintf30);
-    tcase_add_test(tc, test_sprintf31);
-    tcase_add_test(tc, test_sprintf32);
-    tcase_add_test(tc, test_sprintf33);
-    tcase_add_test(tc, test_sprintf35);
-    tcase_add_test(tc, test_sprintf36);
-    tcase_add_test(tc, test_sprintf37);
-    tcase_add_test(tc, test_sprintf38);
-    tcase_add_test(tc, test_sprintf39);
-    tcase_add_test(tc, test_sprintf40);
-    tcase_add_test(tc, test_sprintf41);
-    tcase_add_test(tc, test_sprintf42);
-    tcase_add_test(tc, test_sprintf43);
-    tcase_add_test(tc, test_sprintf44);
-    tcase_add_test(tc, g_trailing_zero);
-    tcase_add_test(tc, g_large);
-    tcase_add_test(tc, g_small);
-    tcase_add_test(tc, g_precision);
-    tcase_add_test(tc, g_precision_zero);
-    tcase_add_test(tc, g_precision_missing);
-    tcase_add_test(tc, g_many_zeroes_in_front);
-    tcase_add_test(tc, g_one_zero);
-    tcase_add_test(tc, g_mantiss);
-    tcase_add_test(tc, g_mantiss_flags);
-    tcase_add_test(tc, g_short_no_mantiss);
-    tcase_add_test(tc, LG);
-    tcase_add_test(tc, g_many);
-    tcase_add_test(tc, g_zero);
-    tcase_add_test(tc, wide_char);
-    tcase_add_test(tc, width_char);
-    tcase_add_test(tc, minus_wide_char);
-    tcase_add_test(tc, wide_string);
-    tcase_add_test(tc, wide_string1);
-    tcase_add_test(tc, wide_string2);
-    tcase_add_test(tc, wide_string3);
-    suite_add_tcase(s, tc);
-    return s;
 }
 
 int s21_str_test(Suite *s) {

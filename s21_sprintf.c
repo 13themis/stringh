@@ -1,8 +1,8 @@
 #include "s21_string.h"
 
-int g_or_bg_to_string(parsing flags, int *len_buf, char *str, long double number) {
+int g_or_bg_to_string(parsing flags, int *buff_len, char *buff_str, long double number) {
     int len_e = 0;
-    char str_e[256];
+    char str_e[BUFF_SIZE];
     if (flags.type == 'g') {
         flags.type = 'e';
     } else {
@@ -15,13 +15,13 @@ int g_or_bg_to_string(parsing flags, int *len_buf, char *str, long double number
     flags.precision -= 1;
     int power = e_or_be_to_string(flags, &len_e, str_e, number, flags.sharp + 1);
     if (power < -4 || (power > 0 && flags.precision + 1 <= power + 1)) {
-        *len_buf = len_e;
-        s21_strcat(str, str_e);
+        *buff_len = len_e;
+        s21_strcat(buff_str, str_e);
     } else {
         flags.precision -= power;
         f_to_string(flags, &len_e, str_e, number, flags.sharp + 1);
-        *len_buf = len_e;
-        s21_strcat(str, str_e);
+        *buff_len = len_e;
+        s21_strcat(buff_str, str_e);
     }
     return 1;
 }
@@ -113,45 +113,45 @@ int round_number(int *buff, int len, int *buff1, int *whole) {
     return 1;
 }
 
-int str_form(parsing flags, int *buff1, int whole, char c, char *str, int *len_str) {
-    for (int j = 0; j < whole; j++) str[j] = buff1[j] + 48;
+int str_form(parsing flags, const int *buff1, int whole, char c, char *buff_str, int *len_str) {
+    for (int j = 0; j < whole; j++) buff_str[j] = buff1[j] + 48;
     if (flags.precision == 0 && flags.sharp == 0) {
-        str[whole] = '\0';
+        buff_str[whole] = '\0';
         *len_str = whole;
     } else {
-        str[whole] = '.';
+        buff_str[whole] = '.';
         for (int j = 0; j < flags.precision; j++) {
-            str[whole + 1 + j] = buff1[whole + j] + 48;
+            buff_str[whole + 1 + j] = buff1[whole + j] + 48;
         }
-        str[whole + flags.precision  + 1] = '\0';
+        buff_str[whole + flags.precision  + 1] = '\0';
         *len_str = whole + flags.precision + 1;
     }
     int len = *len_str;
     if (flags.plus) {
-        s21_memmove(str + 1, str, *len_str);
-        str[0] = c;
-        str[*len_str + 1] = '\0';
+        s21_memmove(buff_str + 1, buff_str, *len_str);
+        buff_str[0] = c;
+        buff_str[*len_str + 1] = '\0';
         *len_str += 1;
     } else {
         if (flags.space) {
-            s21_memmove(str + 1, str, *len_str);
-            str[0] = ' ';
-            str[*len_str+ 1] = '\0';
+            s21_memmove(buff_str + 1, buff_str, *len_str);
+            buff_str[0] = ' ';
+            buff_str[*len_str+ 1] = '\0';
             *len_str += 1;
         }
     }
     return len;
 }
 
-int consider_g(char *str, int *len_str, int *len, int from_g_gird) {
+int consider_g(char *buff_str, int *len_str, int *len, int from_g_gird) {
     if (from_g_gird == 1) {
-        while (str[*len_str - 1] == 48) {
-            str[*len_str - 1] = '\0';
+        while (buff_str[*len_str - 1] == 48) {
+            buff_str[*len_str - 1] = '\0';
             *len_str -= 1;
             *len -= 1;
         }
-        if (str[*len_str - 1] == '.') {
-            str[*len_str - 1] = '\0';
+        if (buff_str[*len_str - 1] == '.') {
+            buff_str[*len_str - 1] = '\0';
             *len_str -= 1;
             *len -= 1;
         }
@@ -159,41 +159,41 @@ int consider_g(char *str, int *len_str, int *len, int from_g_gird) {
     return 1;
 }
 
-int format_f(parsing flags, int len1, int len, char c, char *str, int *len_buf) {
+int format_f(parsing flags, int len1, int len, char c, char *buff_str, int *buff_len) {
     if (flags.width > len) {
         if (!flags.minus) {
-            s21_memmove(str + flags.width - len1, str, len1);
+            s21_memmove(buff_str + flags.width - len1, buff_str, len1);
             if (flags.zero) {
                 for (int j = 0; j < flags.width - len; j++)
-                    str[j] = '0';
+                    buff_str[j] = '0';
                 if (flags.plus) {
-                    str[0] = c;
+                    buff_str[0] = c;
                 } else if (flags.space) {
-                    str[0] = ' ';
+                    buff_str[0] = ' ';
                 }
             } else {
                 for (int j = 0; j < flags.width - len; j++)
-                    str[j] = ' ';
+                    buff_str[j] = ' ';
 
 
                 if (flags.plus) {
-                    str[flags.width - len - 1] = c;
+                    buff_str[flags.width - len - 1] = c;
                 }
             }
         } else {
             for (int j = len1; j < flags.width; j++) {
-                str[j] = ' ';
+                buff_str[j] = ' ';
             }
         }
-        *len_buf = flags.width;
-        str[flags.width] = '\0';
+        *buff_len = flags.width;
+        buff_str[flags.width] = '\0';
     } else {
-        *len_buf = len1;
+        *buff_len = len1;
     }
     return 1;
 }
 
-int form_power(int power, char e, char *str, int *len_buf) {
+int form_power(int power, char e, char *buff_str, int *buff_len) {
     char sign;
     if (power >= 0) {
         sign = '+';
@@ -213,32 +213,28 @@ int form_power(int power, char e, char *str, int *len_buf) {
         pow[0] = 0;
         pow[1] = power;
     }
-    str[*len_buf] = e;
-    str[*len_buf + 1] = sign;
-    str[*len_buf + 2] = pow[0] + 48;
-    str[*len_buf + 3] = pow[1] + 48;
-    str[*len_buf + 4] = '\0';
-    *len_buf = *len_buf + 4;
-    return *len_buf;
+    buff_str[*buff_len] = e;
+    buff_str[*buff_len + 1] = sign;
+    buff_str[*buff_len + 2] = pow[0] + 48;
+    buff_str[*buff_len + 3] = pow[1] + 48;
+    buff_str[*buff_len + 4] = '\0';
+    *buff_len = *buff_len + 4;
+    return *buff_len;
 }
 
-int e_or_be_to_string(parsing flags, int *len_buf, char *str, long double number, int from_g_gird) {
+int e_or_be_to_string(parsing flags, int *buff_len, char *buff_str, long double number, int from_g_gird) {
     long double const_zero = pow(10, -50);
-    *len_buf = 0;
+    *buff_len = 0;
     char e = flags.type, sign = sign_func_subst(&number, &flags.plus, &flags.space);
     if (!flags.point || flags.precision < 0)
         flags.precision = 6;
     int power = 0, whole, len;
     long double buf_number = number;
-    int buff_1[128];
-    int buff_2[128];
+    int buff_1[BUFF_SIZE / 2];
     if (number < const_zero) {
-        power = 0;
         whole = 1;
-        for (int i = 0; i < whole + flags.precision; i++) {
-            buff_2[i] = 0;
-        }
     } else {
+        int buff_2[BUFF_SIZE / 2];
         while (buf_number > 10) {
         buf_number = buf_number / 10;
         power++;
@@ -258,24 +254,19 @@ int e_or_be_to_string(parsing flags, int *len_buf, char *str, long double number
         whole = whole_part(number, buff_2);
         fraction_part(flags.precision, number, buff_2, whole);
     }
-    len = str_form(flags, buff_1, whole, sign, str, len_buf);
-    consider_g(str, len_buf, &len, from_g_gird);
-    int len1 = form_power(power, e, str, len_buf);
+    len = str_form(flags, buff_1, whole, sign, buff_str, buff_len);
+    consider_g(buff_str, buff_len, &len, from_g_gird);
+    int len1 = form_power(power, e, buff_str, buff_len);
     len += 4;
-    format_f(flags, len1, len, sign, str, len_buf);
+    format_f(flags, len1, len, sign, buff_str, buff_len);
     return power;
 }
 
-int consider_precision_x(parsing flags, int i, int *precision, char *str) {
-    if (flags.precision < 0)
-        flags.precision = i;
+int consider_precision_x(parsing flags, int i, int *precision, char *buff_str) {
+    if (flags.precision < 0) flags.precision = i;
     if (flags.precision > i) {
-        s21_memmove(str + flags.precision - i, str, i);
-        for (int j = 0; j < flags.precision - i; j++) {
-            str[j] = '0';
-        }
-    } else if (flags.precision == 0) {
-        flags.precision = i;
+        s21_memmove(buff_str + flags.precision - i, buff_str, i);
+        for (int j = 0; j < flags.precision - i; j++) buff_str[j] = '0';
     } else {
         flags.precision = i;
     }
@@ -286,30 +277,30 @@ int consider_precision_x(parsing flags, int i, int *precision, char *str) {
         len = flags.precision;
     }
     if (flags.sharp) {
-        s21_memmove(str + 2, str, flags.precision);
-        str[0] = '0';
-        str[1] = flags.type;
-        str[flags.precision + 2] = '\0';
+        s21_memmove(buff_str + 2, buff_str, flags.precision);
+        buff_str[0] = '0';
+        buff_str[1] = flags.type;
+        buff_str[flags.precision + 2] = '\0';
     } else {
-        str[flags.precision] = '\0';
+        buff_str[flags.precision] = '\0';
     }
     *precision = flags.precision;
     return len;
 }
 
-int f_to_string(parsing flags, int *len_buf, char *str, long double number, int from_g_gird) {
+int f_to_string(parsing flags, int *buff_len, char *buff_str, long double number, int from_g_gird) {
     char sign = sign_func_subst(&number, &flags.plus, &flags.space);
     if (!flags.point || flags.precision < 0) flags.precision = 6;
-    int buff_1[128];
-    int buff_2[128];
+    int buff_1[BUFF_SIZE / 2];
+    int buff_2[BUFF_SIZE / 2];
     int whole = whole_part(number, buff_1);
 
     fraction_part(flags.precision, number, buff_1, whole);
     round_number(buff_1, whole + flags.precision, buff_2, &whole);
-    int len = str_form(flags, buff_2, whole, sign, str, len_buf);
-    consider_g(str, len_buf, &len, from_g_gird);
-    int len1 = *len_buf;
-    format_f(flags, len1, len, sign, str, len_buf);
+    int len = str_form(flags, buff_2, whole, sign, buff_str, buff_len);
+    consider_g(buff_str, buff_len, &len, from_g_gird);
+    int len1 = *buff_len;
+    format_f(flags, len1, len, sign, buff_str, buff_len);
     return 1;
 }
 
@@ -324,69 +315,69 @@ char *wstrcat(char *dest, const wchar_t *src) {
     return dest;
 }
 
-int format_x(parsing flags, int len, char *str, int *len_buf) {
+int format_x(parsing flags, int len, char *buff_str, int *buff_len) {
         if (flags.width > len) {
         if (!flags.minus) {
-            s21_memmove(str + flags.width - len, str, len);
+            s21_memmove(buff_str + flags.width - len, buff_str, len);
             if (flags.zero) {
                 for (int j = 0; j < flags.width - flags.precision; j++)
-                    str[j] = '0';
+                    buff_str[j] = '0';
                 if (flags.sharp) {
-                    str[0] = '0';
-                    str[1] = flags.type;
+                    buff_str[0] = '0';
+                    buff_str[1] = flags.type;
                 }
             } else {
                 for (int j = 0; j < flags.width - flags.precision; j++)
-                    str[j] = ' ';
+                    buff_str[j] = ' ';
 
 
                 if (flags.sharp) {
-                    str[flags.width - flags.precision - 1] = flags.type;
-                    str[flags.width - flags.precision - 2] = '0';
+                    buff_str[flags.width - flags.precision - 1] = flags.type;
+                    buff_str[flags.width - flags.precision - 2] = '0';
                 }
             }
         } else {
             for (int j = len; j < flags.width; j++) {
-                str[j] = ' ';
+                buff_str[j] = ' ';
             }
-            str[flags.width] = '\0';
+            buff_str[flags.width] = '\0';
         }
-        *len_buf = flags.width;
+        *buff_len = flags.width;
     } else {
-        *len_buf = len;
+        *buff_len = len;
     }
     return 1;
 }
 
-int x_or_bx_to_string(parsing flags, va_list args, int *len_buf, char *str) {
+int x_or_bx_to_string(parsing flags, va_list args, int *buff_len, char *buff_str) {
     long unsigned number = va_arg(args, long unsigned);
     if (flags.leng == 0) {
         number = (unsigned int)number;
     } else if (flags.leng == 'h') {
         number = (short unsigned int)number;
     }
-    char data[256];
+    char data[BUFF_SIZE];
     int index = convert(flags, number, 16, data, flags.type);
-    for (int i = index; i >= 0; i--) str[index - i] = data[i];
-    str[index + 1] = '\0';
+    for (int i = index; i >= 0; i--) buff_str[index - i] = data[i];
+    buff_str[index + 1] = '\0';
     int i = index + 1;
     if (flags.point != 0 && flags.precision >= 0) {
         flags.zero = 0;
     }
     if (number == 0) {
         if (flags.point == 0) {
-            str[0] = '0';
-            str[1] = '\0';
+            buff_str[0] = '0';
+            buff_str[1] = '\0';
             i = 1;
         }
         flags.sharp = 0;
     }
-    int len = consider_precision_x(flags, i, &flags.precision, str);
-    format_x(flags, len, str, len_buf);
-    return *len_buf;
+    int len = consider_precision_x(flags, i, &flags.precision, buff_str);
+    format_x(flags, len, buff_str, buff_len);
+    return *buff_len;
 }
 
-int u_to_string(parsing flags, va_list args, int *len_buf, char *str) {
+int u_to_string(parsing flags, va_list args, int *buff_len, char *buff_str) {
     if (flags.point && flags.precision >=0) {
         flags.zero = 0;
     }
@@ -412,43 +403,43 @@ int u_to_string(parsing flags, va_list args, int *len_buf, char *str) {
         }
     }
     for (int j = 0; j < i; j++) {
-        str[j] = buff[i - j - 1] + 48;
+        buff_str[j] = buff[i - j - 1] + 48;
     }
-    str[i] = '\0';
+    buff_str[i] = '\0';
     if (flags.precision > i) {
-        s21_memmove(str + flags.precision - i, str, i);
+        s21_memmove(buff_str + flags.precision - i, buff_str, i);
         for (int j = 0; j < flags.precision - i; j++) {
-            str[j] = '0';
+            buff_str[j] = '0';
         }
     } else {
         flags.precision = i;
     }
     int len = flags.precision;
-    str[flags.precision] = '\0';
+    buff_str[flags.precision] = '\0';
     if (flags.width > len) {
         if (!flags.minus) {
-            s21_memmove(str + flags.width - len, str, len);
+            s21_memmove(buff_str + flags.width - len, buff_str, len);
             if (flags.zero) {
                 for (int j = 0; j < flags.width - flags.precision; j++)
-                    str[j] = '0';
+                    buff_str[j] = '0';
             } else {
                 for (int j = 0; j < flags.width - flags.precision; j++)
-                    str[j] = ' ';
+                    buff_str[j] = ' ';
             }
         } else {
             for (int j = len; j < flags.width; j++) {
-                str[j] = ' ';
+                buff_str[j] = ' ';
             }
-            str[flags.width] = '\0';
+            buff_str[flags.width] = '\0';
         }
-        *len_buf = flags.width;
+        *buff_len = flags.width;
     } else {
-        *len_buf = len;
+        *buff_len = len;
     }
     return 1;
 }
 
-int form_number_d(parsing flags, long int number, char *str) {
+int form_number_d(parsing flags, long int number, char *buff_str) {
     int i = 0;
     int buff[100];
     if (number) {
@@ -464,17 +455,17 @@ int form_number_d(parsing flags, long int number, char *str) {
         }
     }
     for (int j = 0; j < i; j++) {
-        str[j] = buff[i - j - 1] + 48;
+        buff_str[j] = buff[i - j - 1] + 48;
     }
-    str[i] = '\0';
+    buff_str[i] = '\0';
     return i;
 }
 
-int consider_precision_d(parsing flags, int i, char sign, char *str, int *precision) {
+int consider_precision_d(parsing flags, int i, char sign, char *buff_str, int *precision) {
     if (flags.precision > i) {
-        s21_memmove(str + flags.precision - i, str, i);
+        s21_memmove(buff_str + flags.precision - i, buff_str, i);
         for (int j = 0; j < flags.precision - i; j++) {
-            str[j] = '0';
+            buff_str[j] = '0';
         }
     } else {
         *precision = i;
@@ -487,55 +478,55 @@ int consider_precision_d(parsing flags, int i, char sign, char *str, int *precis
         len = flags.precision;
     }
     if (flags.plus) {
-        s21_memmove(str + 1, str, flags.precision);
-        str[0] = sign;
-        str[flags.precision + 1] = '\0';
+        s21_memmove(buff_str + 1, buff_str, flags.precision);
+        buff_str[0] = sign;
+        buff_str[flags.precision + 1] = '\0';
     } else {
         if (flags.space) {
-            s21_memmove(str + 1, str, flags.precision);
-            str[0] = ' ';
-            str[flags.precision + 1] = '\0';
+            s21_memmove(buff_str + 1, buff_str, flags.precision);
+            buff_str[0] = ' ';
+            buff_str[flags.precision + 1] = '\0';
         } else {
-            str[flags.precision] = '\0';
+            buff_str[flags.precision] = '\0';
         }
     }
     return len;
 }
 
-int format_d(parsing flags, int len, char *str, char sign, int *len_buf) {
+int format_d(parsing flags, int len, char *buff_str, char sign, int *buff_len) {
     if (flags.width > len) {
         if (!flags.minus) {
-            s21_memmove(str + flags.width - len, str, len);
+            s21_memmove(buff_str + flags.width - len, buff_str, len);
             if (flags.zero) {
                 for (int j = 0; j < flags.width - flags.precision; j++)
-                    str[j] = '0';
+                    buff_str[j] = '0';
                 if (flags.plus) {
-                    str[0] = sign;
+                    buff_str[0] = sign;
                 } else if (flags.space) {
-                    str[0] = ' ';
+                    buff_str[0] = ' ';
                 }
             } else {
                 for (int j = 0; j < flags.width - flags.precision; j++)
-                    str[j] = ' ';
+                    buff_str[j] = ' ';
 
                 if (flags.plus) {
-                    str[flags.width - flags.precision - 1] = sign;
+                    buff_str[flags.width - flags.precision - 1] = sign;
                 }
             }
         } else {
             for (int j = len; j < flags.width; j++) {
-                str[j] = ' ';
+                buff_str[j] = ' ';
             }
-            str[flags.width] = '\0';
+            buff_str[flags.width] = '\0';
         }
-        *len_buf = flags.width;
+        *buff_len = flags.width;
     } else {
-        *len_buf = len;
+        *buff_len = len;
     }
     return 1;
 }
 
-int d_or_i_to_string(parsing flags, va_list args, int *len_buf, char *str) {
+int d_or_i_to_string(parsing flags, va_list args, int *buff_len, char *buff_str) {
     if (flags.point && flags.precision >= 0)
         flags.zero = 0;
     long int number = va_arg(args, long int);
@@ -545,58 +536,57 @@ int d_or_i_to_string(parsing flags, va_list args, int *len_buf, char *str) {
         number = (short int)number;
     }
     char sign = sign_func_whole(&number, &flags.plus, &flags.space);
-    int i = form_number_d(flags, number, str);
-    int len = consider_precision_d(flags, i, sign, str, &flags.precision);
-    format_d(flags, len, str, sign, len_buf);
+    int i = form_number_d(flags, number, buff_str);
+    int len = consider_precision_d(flags, i, sign, buff_str, &flags.precision);
+    format_d(flags, len, buff_str, sign, buff_len);
     return 1;
 }
 
-int o_to_string(parsing flags, va_list args, int *len_buf, char *str) {
+int o_to_string(parsing flags, va_list args, int *buff_len, char *buff_str) {
     long unsigned number = va_arg(args, long unsigned);
     if (flags.leng == 0) {
         number = (unsigned int)number;
     } else if (flags.leng == 'h') {
         number = (short unsigned int)number;
     }
-    char data[256];
+    char data[BUFF_SIZE];
     int index = convert(flags, number, 8, data, flags.type);
     for (int i = index; i >= 0; i--)
-        str[index - i] = data[i];
-    str[index + 1] = '\0';
+        buff_str[index - i] = data[i];
+    buff_str[index + 1] = '\0';
     int i = index + 1;
     if (flags.point)
         flags.zero = 0;
     if (flags.precision < 0)
         flags.precision = i;
     if (flags.sharp && number != 0) {
-        s21_memmove(str + 1, str, i);
-        str[0] = '0';
+        s21_memmove(buff_str + 1, buff_str, i);
+        buff_str[0] = '0';
         i++;
-        str[i] = '\0';
+        buff_str[i] = '\0';
     } else {
-        str[i] = '\0';
+        buff_str[i] = '\0';
     }
     if (flags.precision > i) {
-        s21_memmove(str + flags.precision - i, str, i);
+        s21_memmove(buff_str + flags.precision - i, buff_str, i);
         for (int j = 0; j < flags.precision - i; j++) {
-            str[j] = '0';
+            buff_str[j] = '0';
         }
     } else {
         flags.precision = i;
     }
     flags.plus = 0;
     flags.space = 0;
-    format_d(flags, flags.precision, str, '+', len_buf);
-    return *len_buf;
+    format_d(flags, flags.precision, buff_str, '+', buff_len);
+    return *buff_len;
 }
 
-int p_to_string(parsing flags, va_list args, int *len_buf, char *str) {
-    int size = 0;
+int p_to_string(parsing flags, va_list args, int *buff_len, char *buff_str) {
     unsigned long num = va_arg(args, unsigned long);
-    char data[256];
-    char reverse[256];
-    char src[256];
-    char tmp[256];
+    char data[BUFF_SIZE];
+    char reverse[BUFF_SIZE];
+    char src[BUFF_SIZE];
+    char tmp[BUFF_SIZE];
     int index = convert(flags, num, 16, data, 'x');
     for (int i = index; i >= 0; i--) reverse[index - i] = data[i];
     reverse[index + 1] = '\0';
@@ -613,71 +603,72 @@ int p_to_string(parsing flags, va_list args, int *len_buf, char *str) {
         }
     s21_strcat(src, reverse);
     if (flags.width) {
+        int size = 0;
         if (flags.width > (int)s21_strlen(src)) {
             size = flags.width - (int)s21_strlen(src);
         }
         if (flags.minus) {
             for (int i = 0; i < (int)s21_strlen(src); i++) {
-                str[i] = src[i];
+                buff_str[i] = src[i];
             }
             for (int j = (int)s21_strlen(src); j < flags.width; j++) {
-                str[j] = ' ';
+                buff_str[j] = ' ';
             }
         } else {
             for (int i = 0; i < (int)s21_strlen(src); i++) {
                 tmp[i] = src[i];
             }
             for (int i = 0; i < size; i++) {
-                str[i] = ' ';
+                buff_str[i] = ' ';
             }
-            int index = 0;
-            for (int i = size; i< size + (int)s21_strlen(tmp); i++) {
-                str[i] =  tmp[index];
+            index = 0;
+            for (int i = size; i < size + (int)s21_strlen(tmp); i++) {
+                buff_str[i] =  tmp[index];
                 index++;
             }
         }
     } else {
         for (int i = 0; i < (int)s21_strlen(src); i++) {
-            str[i] = src[i];
+            buff_str[i] = src[i];
         }
     }
-        *len_buf = (int)s21_strlen(str);
+        *buff_len = (int)s21_strlen(buff_str);
     return 0;
 }
 
-int s_to_string(parsing flags, va_list args, int *len_buf, char *str) {
+int s_to_string(parsing flags, va_list args, int *buff_len, char *buff_str) {
     if (flags.leng == 0) {
         char *src;
         src = va_arg(args, char *);
-        s21_strcat(str, src);
+        s21_strcat(buff_str, src);
     } else {
         wchar_t *src;
         src = (wchar_t *)va_arg(args, wchar_t *);
-        wstrcat(str, src);
+        wstrcat(buff_str, src);
         }
-        if (flags.precision >= (int)s21_strlen(str) || (flags.precision == 0 && flags.point == 0)
+        if (flags.precision >= (int)s21_strlen(buff_str) || (flags.precision == 0 && flags.point == 0)
             || flags.precision < 0)
-            flags.precision = (int) s21_strlen(str);
-        str[flags.precision] = '\0';
+            flags.precision = (int) s21_strlen(buff_str);
+        buff_str[flags.precision] = '\0';
 
         if (flags.width > flags.precision) {
             if (!flags.minus) {
-                s21_memmove(str + flags.width - flags.precision, str, flags.precision);
+                s21_memmove(buff_str + flags.width - flags.precision, buff_str, flags.precision);
                 if (flags.zero) {
                     for (int i = 0; i < flags.width - flags.precision; i++)
-                        str[i] = '0';
+                        buff_str[i] = '0';
                 } else {
                     for (int i = 0; i < flags.width - flags.precision; i++)
-                        str[i] = ' ';
+                        buff_str[i] = ' ';
                 }
             } else {
                     for (int i = flags.precision; i < flags.width; i++)
-                        str[i] = ' ';
+                        buff_str[i] = ' ';
             }
-            str[flags.width] = '\0';
-            *len_buf = flags.width;
+            buff_str[flags.width] = '\0';
+            *buff_len = flags.width;
         } else {
-            *len_buf = flags.precision;
+            *buff_len = flags.precision;
         }
     return 1;
 }
@@ -703,20 +694,20 @@ char convert_to_x(int value) {
 }
 
 int convert(parsing flags, long unsigned num, long unsigned divider, char *data, char spec) {
-    long unsigned rem = num;
-    char ch;
     int i = 0;
     if (num) {
+        long unsigned rem;
+        char ch;
         while (num) {
             rem = num % divider;
             num = num / divider;
             if ((spec == 'x') || (spec == 'o')) ch = convert_to_x(rem);
-            if  (spec == 'X') ch = convert_to_bx(rem);
+            if (spec == 'X') ch = convert_to_bx(rem);
             data[i] = ch;
             i++;
         }
     } else {
-        if (flags.precision < 0) {
+        if (flags.precision <= 0) {
             data[i] = '0';
             i++;
         }
@@ -740,7 +731,7 @@ long double subst_input(parsing flags, va_list args) {
     return number;
 }
 
-int c_or_pct_to_string(parsing flags, va_list args, int *len_buf, char *str) {
+int c_or_pct_to_string(parsing flags, va_list args, int *buff_len, char *buff_str) {
     char c;
     if (flags.type == '%') {
         c = '%';
@@ -750,27 +741,27 @@ int c_or_pct_to_string(parsing flags, va_list args, int *len_buf, char *str) {
     if (flags.width == 0)
         flags.width = 1;
     if (flags.minus) {
-        str[0] = c;
+        buff_str[0] = c;
         for (int i = 1; i < flags.width; i++) {
-            str[i] = ' ';
+            buff_str[i] = ' ';
         }
-        str[flags.width] = '\0';
+        buff_str[flags.width] = '\0';
     } else {
         if (flags.zero) {
             for (int i = 0; i < flags.width - 1 ; i++)
-                str[i] = '0';
+                buff_str[i] = '0';
         } else {
             for (int i = 0; i < flags.width - 1 ; i++)
-                str[i] = ' ';
+                buff_str[i] = ' ';
         }
-        str[flags.width - 1] = c;
-        str[flags.width] = '\0';
+        buff_str[flags.width - 1] = c;
+        buff_str[flags.width] = '\0';
     }
 
     if (flags.width) {
-        *len_buf = flags.width;
+        *buff_len = flags.width;
     } else {
-        *len_buf = 1;
+        *buff_len = 1;
     }
     return 1;
 }
@@ -838,7 +829,7 @@ int calling_function(parsing flags, va_list args, int *buff_len, char *buff_str,
 
 int spec(char c) {
     int result = 0;
-    int code[16] = {99, 100, 101, 102, 105, 69, 71, 103, 111, 115, 117, 88, 120, 110, 112, 37};
+    const int code[16] = {99, 100, 101, 102, 105, 69, 71, 103, 111, 115, 117, 88, 120, 110, 112, 37};
     for (int i = 0; i < 16; i++) {
         if (c == code[i]) {
             result = code[i];
@@ -855,12 +846,12 @@ int leng(char c) {
     return result;
 }
 
-int form_number(const char *str, int *len) {
+int form_number(const char *buff_str, int *len) {
     int factor = 0;
     int len1 = 0;
-    while (def_number(*str)) {
-        factor = (factor * 10) + (*str) - 48;
-        str++;
+    while (def_number(*buff_str)) {
+        factor = (factor * 10) + (*buff_str) - 48;
+        buff_str++;
         len1++;
     }
     *len = len1;
@@ -876,7 +867,7 @@ int def_number(char c) {
 }
 
 int s21_ia_sprintf(char *output_str, const char *input_str, va_list args) {
-    char buff_str[256];
+    char buff_str[BUFF_SIZE];
     int buff_len;
     int length = 0;
 
@@ -892,7 +883,7 @@ int s21_ia_sprintf(char *output_str, const char *input_str, va_list args) {
         input_str++;
         int flag = 1;
         buff_len = 0;
-        for (int i = 0; i < 256; i++) buff_str[i] = '\0';
+        for (int i = 0; i < BUFF_SIZE; i++) buff_str[i] = '\0';
 
         while (flag) {
             if (*input_str == ' ' && flags.plus == 0) flags.space = 1;
@@ -953,10 +944,10 @@ int s21_ia_sprintf(char *output_str, const char *input_str, va_list args) {
     return length;
 }
 
-int s21_sprintf(char *str, const char *format, ...) {
+int s21_sprintf(char *buff_str, const char *format, ...) {
     va_list(input_args);
     va_start(input_args, format);
-    int i = s21_ia_sprintf(str, format, input_args);
+    int i = s21_ia_sprintf(buff_str, format, input_args);
     va_end(input_args);
     return i;
 }

@@ -2,7 +2,7 @@
 
 int delim_flag(char c, const char *delim) {
   int res = 0;
-  int end =0;
+  int end = 0;
 
   while (*delim != '\0' && end == 0) {
     if (c == *delim) {
@@ -28,7 +28,7 @@ char *s21_strtok(char *str, const char *delim) {
         str++;
       }
       if (*str != '\0') {
-        end_str =str;
+        end_str = str;
         int end = 0;
         while (end != 1) {
           if (*str == '\0') {
